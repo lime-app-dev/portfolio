@@ -450,7 +450,7 @@ function display(x, angle, secondary) {
     ctx.font = '12px system-ui';
     ctx.fillText('Finder    File    Edit    View    Go    Window    Help', 16, 15);
     ctx.fillText('10:42 AM', 652, 15);
-    for (const [label, y] of [['Projects', 52], ['Work experience', 120]]) {
+    for (const [label, y] of [['Work experience', 52], ['Projects', 120]]) {
       ctx.fillStyle = '#91cbff';
       ctx.beginPath();
       ctx.roundRect(35, y - 4, 16, 10, 3);
@@ -611,7 +611,7 @@ const openComputer = document.querySelector('#open-computer');
 const standLabel = document.querySelector('#stand-label');
 const aim = document.querySelector('#aim');
 const computer = document.querySelector('#computer');
-const openProjects = document.querySelector('#open-projects');
+const openExperience = document.querySelector('#open-experience');
 const stand = document.querySelector('#stand');
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
 const touchLayout = matchMedia('(pointer: coarse), (max-width: 640px)');
@@ -649,7 +649,7 @@ function revealDesktop(distance) {
       { transform: 'none', opacity: 1 }
     ], { duration: 460, easing: 'cubic-bezier(0.22, 0.61, 0.36, 1)' });
   }
-  openProjects.focus();
+  openExperience.focus();
 }
 const standing = new THREE.Vector3();
 let mode = 'walking';

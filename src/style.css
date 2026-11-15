@@ -268,7 +268,7 @@ body:has(#computer:not([hidden])) #sound-room{visibility:hidden}
   }
   .cabin-actions{display:flex;justify-self:stretch;align-items:end;justify-content:space-between;gap:8px}
   #hint,#sit{
-    position:absolute;bottom:calc(100% + 24px);left:50%;
+    position:absolute;bottom:50%;left:50%;
     transform:translate(-50%,50%);white-space:nowrap;
   }
   #joystick{
@@ -313,4 +313,10 @@ body:has(#computer:not([hidden])) #sound-room{visibility:hidden}
   .traffic-lights{left:3px;gap:0}
   .traffic-lights button{width:27px;height:44px}
   .folder-back{min-height:44px}
+}
+
+
+@media (max-width: 350px) {
+  #joystick{width:62px;height:62px}
+  #hint{font-size:.68rem;padding-inline:.5rem}
 }
