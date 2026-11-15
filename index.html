@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#252622"><title>Bernardine Richards | Portfolio</title></head>
+<body>
+<div id="scene" aria-label="3D working studio"></div>
+<header><span>PORTFOLIO</span><h1>Bernardine Richards</h1></header>
+<button id="sound-room" class="sound-toggle" type="button" aria-label="Sound" aria-pressed="false" title="Turn sound on"><span class="sound-icon" aria-hidden="true"></span></button>
+<div id="aim" aria-hidden="true">+</div>
+<footer id="controls">
+  <p id="hint" aria-live="polite">Walk toward the desk</p>
+  <button id="sit" type="button" hidden>Sit down <kbd>E</kbd></button>
+  <div id="directions" aria-label="Movement controls">
+    <button data-move="ArrowLeft" aria-label="Move left">←</button>
+    <button data-move="ArrowUp" aria-label="Move forward">↑</button>
+    <button data-move="ArrowDown" aria-label="Move backward">↓</button>
+    <button data-move="ArrowRight" aria-label="Move right">→</button>
+  </div>
+  <small id="instruction">WASD or arrows to move · Drag to look</small>
+</footer>
+<section id="computer" aria-label="Studio computer" hidden>
+  <div class="bar">
+    <span>Finder</span>
+    <div class="desktop-actions">
+      <button class="sound-toggle" type="button" aria-label="Sound" aria-pressed="false" title="Turn sound on"><span class="sound-icon" aria-hidden="true"></span></button>
+      <button id="stand" type="button">Stand up <kbd>Esc</kbd></button>
+    </div>
+  </div>
+  <div id="launcher" aria-label="Desktop shortcuts">
+    <button id="open-projects" class="desktop-shortcut" data-open-folder="projects" type="button"><span class="folder" aria-hidden="true"></span>Projects</button>
+    <button id="open-experience" class="desktop-shortcut" data-open-folder="experience" type="button"><span class="folder" aria-hidden="true"></span>Work experience</button>
+    <a class="desktop-shortcut" href="https://www.linkedin.com/in/bernardine-richards-2ba6a544b/" target="_blank" rel="noopener noreferrer"><span class="browser-icon" aria-hidden="true"></span>LinkedIn</a>
+  </div>
+
+  <section id="desktop-window" class="mac-window" aria-labelledby="window-title" hidden>
+    <div class="window-titlebar">
+      <div class="traffic-lights">
+        <button class="light-close" data-window-action="close" type="button" aria-label="Close window" title="Close"></button>
+        <button class="light-minimize" data-window-action="minimize" type="button" aria-label="Minimize window" title="Minimize"></button>
+        <button class="light-zoom" data-window-action="zoom" type="button" aria-label="Expand window" aria-pressed="false" title="Expand"></button>
+      </div>
+      <span id="window-title">Projects</span>
+    </div>
+    <div class="folder-toolbar" hidden>
+      <button class="folder-back" data-open-folder="projects" type="button"><span aria-hidden="true">‹</span> Projects</button>
+    </div>
+    <div class="window-content folder-content" data-folder="projects" hidden>
+      <h2 tabindex="-1">Projects</h2>
+      <div class="folder-grid">
+        <button class="folder-item" data-open-folder="lime-bundles" type="button"><span class="folder" aria-hidden="true"></span>Lime Bundles</button>
+        <button class="folder-item" data-open-folder="spread" type="button"><span class="folder" aria-hidden="true"></span>Spread</button>
+      </div>
+    </div>
+    <div class="window-content experience-content" data-folder="experience" hidden>
+      <div class="experience-intro">
+        <h2 tabindex="-1">Work experience</h2>
+      </div>
+      <ol class="experience-roles">
+        <li>
+          <div class="role-company"><strong>Eight</strong><span>Full-time</span></div>
+          <h3>Senior Frontend Developer</h3>
+          <p class="role-date"><time datetime="2019-11">Nov 2019</time> – <time datetime="2026-10">Oct 2026</time></p>
+          <p>Over nearly seven years at Eight, I developed and maintained Shopify Theme Store themes including Halftone, Capital, Flow and Envy. I built responsive storefront features and improved existing themes, working with designers and testers to deliver accessible, performant storefronts and keep the code maintainable as the themes evolved.</p>
+        </li>
+        <li>
+          <div class="role-company"><strong>Carson eCommerce</strong><span>Part-time · Remote</span></div>
+          <h3>Junior Front End Developer</h3>
+          <p class="role-date"><time datetime="2019-10">Oct 2019</time></p>
+          <p>I worked alongside a team of developers on small coding tasks for Shopify store owners, using HTML, CSS and JavaScript and learning Shopify’s Liquid templating language.</p>
+        </li>
+      </ol>
+      <section class="experience-work" aria-labelledby="experience-work-title">
+        <h3 id="experience-work-title">Selected work at Eight</h3>
+        <p>Shopify themes I contributed to, plus Kitenzo, a production app I worked on for a few months.</p>
+        <ul class="experience-gallery">
+          <li><a class="experience-item" href="https://themes.shopify.com/themes/halftone/presets/halftone" target="_blank" rel="noopener noreferrer">
+            <div class="experience-art"><img src="/experience/halftone.webp" alt="" loading="lazy"></div>
+            <div class="experience-caption"><div><strong>Halftone</strong><span>Shopify Theme Store</span></div><span class="experience-arrow" aria-hidden="true">↗</span></div>
+          </a></li>
+          <li><a class="experience-item" href="https://themes.shopify.com/themes/capital/presets/capital" target="_blank" rel="noopener noreferrer">
+            <div class="experience-art"><img src="/experience/capital.webp" alt="" loading="lazy"></div>
+            <div class="experience-caption"><div><strong>Capital</strong><span>Shopify Theme Store</span></div><span class="experience-arrow" aria-hidden="true">↗</span></div>
+          </a></li>
+          <li><a class="experience-item" href="https://themes.shopify.com/themes/flow/presets/flow" target="_blank" rel="noopener noreferrer">
+            <div class="experience-art"><img src="/experience/flow.webp" alt="" loading="lazy"></div>
+            <div class="experience-caption"><div><strong>Flow</strong><span>Shopify Theme Store</span></div><span class="experience-arrow" aria-hidden="true">↗</span></div>
+          </a></li>
+          <li><a class="experience-item" href="https://themes.shopify.com/themes/envy/presets/envy" target="_blank" rel="noopener noreferrer">
+            <div class="experience-art"><img src="/experience/envy.webp" alt="" loading="lazy"></div>
+            <div class="experience-caption"><div><strong>Envy</strong><span>Shopify Theme Store</span></div><span class="experience-arrow" aria-hidden="true">↗</span></div>
+          </a></li>
+          <li class="experience-app"><a class="experience-item" href="https://apps.shopify.com/bundlebuilder" target="_blank" rel="noopener noreferrer">
+            <div class="experience-art"><img src="/experience/kitenzo.webp" alt="" loading="lazy"></div>
+            <div class="experience-caption"><div><strong>Kitenzo</strong><span>Shopify App Store</span></div><span class="experience-arrow" aria-hidden="true">↗</span></div>
+          </a></li>
+        </ul>
+      </section>
+    </div>
+    <article class="window-content project-content" data-folder="lime-bundles" data-parent-folder="projects" hidden>
+      <div class="project-hero">
+        <img class="project-icon" src="/projects/lime-icon.png" width="60" height="60" alt="">
+        <p class="window-eyebrow">Shopify app</p>
+        <h2 id="project-title" tabindex="-1">Lime Bundles</h2>
+        <p class="project-description">I worked on both sides of Lime Bundles: how merchants set up offers in Shopify’s theme editor, and how shoppers build a bundle and add it to the cart.</p>
+        <a class="project-source" href="https://apps.shopify.com/lime-bundles" target="_blank" rel="noopener noreferrer">Shopify App Store listing <span aria-hidden="true">↗</span></a>
+      </div>
+      <div class="project-detail">
+        <figure class="project-image">
+          <img src="/projects/lime-build-a-box.png" width="960" height="540" alt="Lime Bundles build-a-box interface beside a completed bundle with its savings shown">
+          <figcaption>Build a box on the storefront</figcaption>
+        </figure>
+        <section class="engineering-notes" aria-labelledby="lime-engineering">
+          <h3 id="lime-engineering">Selected engineering work</h3>
+          <dl class="project-features">
+            <div><dt>Theme editor integration</dt><dd>Made the bundle block initialise when a merchant first adds it to the theme editor, so they can preview it before saving.</dd></div>
+            <div><dt>Cart compatibility</dt><dd>Adapted bundle add-to-cart to work with different theme cart drawers. Added a cart-page fallback for themes whose drawers the app can’t update.</dd></div>
+            <div><dt>Partial adds</dt><dd>Verified that all expected bundle items reached the cart and added rollback logic for incomplete adds.</dd></div>
+          </dl>
+        </section>
+      </div>
+    </article>
+    <article class="window-content project-content" data-folder="spread" data-parent-folder="projects" hidden>
+      <div class="project-hero spread-hero">
+        <p class="window-eyebrow">Shopify theme</p>
+        <h2 tabindex="-1">Spread</h2>
+        <p class="project-description">I developed Spread for prepared-meal and food retailers. The project focused on helping shoppers find meals and compare the details that matter before building an order.</p>
+        <span class="project-status">In Shopify Theme Store review</span>
+      </div>
+      <div class="project-detail">
+        <figure class="project-image">
+          <img src="/projects/spread.jpg" width="1240" height="810" alt="Spread’s prepared-meal demo homepage with a featured meal banner and a browsable menu">
+          <figcaption>Spread’s prepared-meal storefront demo</figcaption>
+        </figure>
+        <section class="engineering-notes" aria-labelledby="spread-engineering">
+          <h3 id="spread-engineering">Selected theme work</h3>
+          <dl class="project-features">
+            <div><dt>Storefront layouts</dt><dd>Developed the homepage, collection and product layouts around browsing meals and choosing what to order.</dd></div>
+            <div><dt>Product data</dt><dd>Used Shopify metafields to present structured details like nutrition and spice levels on product pages.</dd></div>
+            <div><dt>Product add-ons</dt><dd>Built a product-page flow for selecting optional extras and adding them to the cart with the main item.</dd></div>
+          </dl>
+        </section>
+      </div>
+    </article>
+  </section>
+</section>
+<small id="music-credit" hidden>
+  <a href="https://purrplecat.bandcamp.com/track/cozy-fireplace" target="_blank" rel="noopener">Cozy Fireplace by Purrple Cat</a>
+  · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>
+</small>
+<audio id="studio-music" src="/cozy-fireplace.mp3" preload="none" loop hidden></audio>
+<audio id="studio-rain" src="/studio-rain.mp3" preload="none" loop hidden></audio>
+<noscript>This prototype needs JavaScript to render the studio.</noscript>
+<script type="module" src="/src/main.js"></script>
+</body>
+</html>
