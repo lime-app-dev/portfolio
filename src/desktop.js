@@ -2,6 +2,7 @@ const computer = document.querySelector('#computer');
 const windowElement = document.querySelector('#desktop-window');
 const title = document.querySelector('#window-title');
 const toolbar = windowElement.querySelector('.folder-toolbar');
+const backButton = toolbar.querySelector('.folder-back');
 const panels = [...windowElement.querySelectorAll('[data-folder]')];
 const zoom = windowElement.querySelector('[data-window-action="zoom"]');
 const shareButton = document.querySelector('#copy-window-link');
@@ -57,7 +58,8 @@ export function openFolder(folder, returnFrom) {
   if (hash) history.replaceState(null, '', hash);
   else clearFolderLink();
   windowElement.hidden = false;
-  toolbar.hidden = !selected.dataset.parentFolder;
+  backButton.hidden = !selected.dataset.parentFolder;
+  toolbar.hidden = backButton.hidden && shareButton.hidden;
   for (const panel of panels) panel.hidden = panel !== selected;
   const heading = selected.querySelector('h2');
   title.textContent = heading.textContent;

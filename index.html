@@ -29,7 +29,7 @@
 </footer>
 <section id="computer" aria-label="Studio computer" hidden>
   <div class="bar">
-    <span>Finder</span>
+    <span class="finder-brand">Finder</span>
     <div class="desktop-actions">
       <button class="sound-toggle" type="button" aria-label="Sound" aria-pressed="false" title="Turn sound on"><span class="sound-icon" aria-hidden="true"></span></button>
       <button id="stand" type="button"><span id="stand-label">Stand up</span> <kbd>Esc</kbd></button>
@@ -50,13 +50,14 @@
         <button class="light-zoom" data-window-action="zoom" type="button" aria-label="Expand window" aria-pressed="false" title="Expand"></button>
       </div>
       <span id="window-title">Projects</span>
+
+    </div>
+    <div class="folder-toolbar" hidden>
+      <button class="folder-back" data-open-folder="projects" type="button" hidden><span aria-hidden="true">‹</span> Projects</button>
+      <span id="share-status" class="share-status" role="status" hidden></span>
       <button id="copy-window-link" type="button" hidden>Copy link</button>
     </div>
-    <div id="share-status" class="share-status" role="status" hidden></div>
     <input id="share-url" aria-label="Link to this window" readonly hidden>
-    <div class="folder-toolbar" hidden>
-      <button class="folder-back" data-open-folder="projects" type="button"><span aria-hidden="true">‹</span> Projects</button>
-    </div>
     <div class="window-content folder-content" data-folder="contact" hidden>
       <h2 tabindex="-1">Contact</h2>
       <a class="project-source" href="https://www.linkedin.com/in/bernardine-richards-2ba6a544b/" target="_blank" rel="noopener noreferrer">Connect on LinkedIn <span aria-hidden="true">↗</span></a>
@@ -64,8 +65,8 @@
     <div class="window-content folder-content" data-folder="projects" hidden>
       <h2 tabindex="-1">Projects</h2>
       <div class="folder-grid">
-        <button class="folder-item" data-open-folder="lime-bundles" type="button"><span class="folder" aria-hidden="true"></span>Lime Bundles</button>
-        <button class="folder-item" data-open-folder="spread" type="button"><span class="folder" aria-hidden="true"></span>Spread</button>
+        <button class="folder-item" data-open-folder="lime-bundles" type="button"><span class="folder" aria-hidden="true"></span><span>Lime Bundles<small>Shopify app</small></span></button>
+        <button class="folder-item" data-open-folder="spread" type="button"><span class="folder" aria-hidden="true"></span><span>Spread<small>Shopify theme</small></span></button>
       </div>
     </div>
     <div class="window-content experience-content" data-folder="experience" hidden>
@@ -115,68 +116,51 @@
     </div>
     <article class="window-content project-content" data-folder="lime-bundles" data-parent-folder="projects" hidden>
       <div class="project-hero">
-        <img class="project-icon" src="/projects/lime-icon.png" width="60" height="60" alt="">
-        <p class="window-eyebrow">Shopify app</p>
-        <h2 id="project-title" tabindex="-1">Lime Bundles</h2>
-        <p class="project-description">I worked on both sides of Lime Bundles: how merchants set up offers in Shopify’s theme editor, and how shoppers build a bundle and add it to the cart.</p>
-        <a class="project-source" href="https://apps.shopify.com/lime-bundles" target="_blank" rel="noopener noreferrer">Shopify App Store listing <span aria-hidden="true">↗</span></a>
+        <div class="project-identity">
+          <img class="project-icon" src="/projects/lime-icon.png" width="60" height="60" alt="">
+          <div>
+            <p class="window-eyebrow">Shopify app</p>
+            <h2 tabindex="-1">Lime Bundles</h2>
+          </div>
+        </div>
+        <p class="project-description">I built Lime Bundles from scratch as a full-stack Shopify app. I built the embedded admin where merchants configure offers, the storefront widgets shoppers use to assemble bundles, and the discount and cart logic that connects them.</p>
+        <a class="project-source" href="https://apps.shopify.com/lime-bundles" target="_blank" rel="noopener noreferrer">View Shopify App Store listing <span aria-hidden="true">↗</span></a>
       </div>
-      <section class="project-story" aria-labelledby="lime-story">
-        <h3 id="lime-story">Getting a complete bundle into the cart</h3>
-        <ol>
-          <li><strong>Verify the add.</strong> Check that every expected bundle item made it into the cart. Roll back incomplete adds.</li>
-          <li><strong>Refresh the drawer.</strong> Use the theme’s cart update flow when the drawer supports it.</li>
-          <li><strong>Fall back to the cart page.</strong> Show the completed bundle there when the drawer can’t be reliably updated.</li>
-        </ol>
-      </section>
       <div class="project-detail">
-        <figure class="project-image">
-          <img src="/projects/lime-build-a-box.png" width="960" height="540" alt="Lime Bundles build-a-box interface beside a completed bundle with its savings shown">
-          <figcaption>Build a box on the storefront</figcaption>
-        </figure>
         <section class="engineering-notes" aria-labelledby="lime-engineering">
-          <h3 id="lime-engineering">Selected engineering work</h3>
+          <h3 id="lime-engineering">What I built</h3>
           <dl class="project-features">
-            <div><dt>Theme editor integration</dt><dd>Made the bundle block initialise when a merchant first adds it to the theme editor, so they can preview it before saving.</dd></div>
-            <div><dt>Cart compatibility</dt><dd>Adapted bundle add-to-cart to work with different theme cart drawers. Added a cart-page fallback for themes whose drawers the app can’t update.</dd></div>
-            <div><dt>Partial adds</dt><dd>Verified that all expected bundle items reached the cart and added rollback logic for incomplete adds.</dd></div>
+            <div><dt>Embedded merchant admin</dt><dd>Built the offer editor with React and TypeScript, and used Shopify’s Admin GraphQL API and Prisma-backed storage to connect merchant settings to Shopify.</dd></div>
+            <div><dt>Storefront and discounts</dt><dd>Built theme app blocks and shopper-facing widgets, and used Shopify Functions to apply bundle discounts. I also handled the theme editor’s block lifecycle so a new block can render before the merchant saves.</dd></div>
+            <div><dt>Cross-theme cart integration</dt><dd>Integrated with different cart drawers, checked that each bundle arrived intact, and added recovery for partial adds and a cart-page fallback for unsupported drawers.</dd></div>
           </dl>
         </section>
+        <figure class="project-image">
+          <img src="/projects/lime-build-a-box.png" width="960" height="540" alt="Lime Bundles build-a-box interface beside a completed bundle with its savings shown">
+          <figcaption>The build-a-box widget lets shoppers assemble a bundle on the storefront.</figcaption>
+        </figure>
       </div>
     </article>
     <article class="window-content project-content" data-folder="spread" data-parent-folder="projects" hidden>
       <div class="project-hero spread-hero">
         <p class="window-eyebrow">Shopify theme</p>
         <h2 tabindex="-1">Spread</h2>
-        <p class="project-description">I developed Spread for prepared-meal and food retailers. The project focused on helping shoppers find meals and compare the details that matter before building an order.</p>
+        <p class="project-description">I built Spread from scratch as a Shopify theme for prepared-meal and food retailers. I developed the storefront, the controls merchants use to configure it, and the product-page interactions that help shoppers choose meals and extras.</p>
         <span class="project-status">In Shopify Theme Store review</span>
       </div>
-      <section class="project-story" aria-labelledby="spread-story">
-        <h3 id="spread-story">From product data to a nutrition table</h3>
-        <div class="story-images">
-          <figure class="project-image">
-            <img src="/projects/spread-product-values.webp" loading="lazy" alt="Shopify product editor showing values for Fat, Saturates, Carbohydrate and Sugars">
-            <figcaption>1. The merchant enters nutrition values in the product’s Shopify metafields.</figcaption>
-          </figure>
-          <figure class="project-image">
-            <img src="/projects/spread-storefront-table.webp" loading="lazy" alt="Nutrition details displayed in a table on Spread’s product page">
-            <figcaption>2. Spread renders those values as a table shoppers can scan on the product page.</figcaption>
-          </figure>
-        </div>
-      </section>
       <div class="project-detail">
-        <figure class="project-image">
-          <img src="/projects/spread.jpg" width="1240" height="810" alt="Spread’s prepared-meal demo homepage with a featured meal banner and a browsable menu">
-          <figcaption>Spread’s prepared-meal storefront demo</figcaption>
-        </figure>
         <section class="engineering-notes" aria-labelledby="spread-engineering">
-          <h3 id="spread-engineering">Selected theme work</h3>
+          <h3 id="spread-engineering">What I built</h3>
           <dl class="project-features">
-            <div><dt>Storefront layouts</dt><dd>Developed the homepage, collection and product layouts around browsing meals and choosing what to order.</dd></div>
-            <div><dt>Product data</dt><dd>Used Shopify metafields to present structured details like nutrition and spice levels on product pages.</dd></div>
-            <div><dt>Product add-ons</dt><dd>Built a product-page flow for selecting optional extras and adding them to the cart with the main item.</dd></div>
+            <div><dt>Theme architecture</dt><dd>Built reusable Liquid sections, blocks and JSON templates for the homepage, collections and product pages, with schema settings merchants can configure in Shopify’s theme editor.</dd></div>
+            <div><dt>Structured product information</dt><dd>Used product metafields and Liquid to render nutrition tables and spice levels. Nutrition rows can include details such as sugars under carbohydrates, with rows drawn from the data each product provides.</dd></div>
+            <div><dt>Storefront interactions</dt><dd>Used responsive CSS and JavaScript to support meal browsing and build a product-page add-on flow that sends selected extras to the cart alongside the meal.</dd></div>
           </dl>
         </section>
+        <figure class="project-image">
+          <img src="/projects/spread.jpg" width="1240" height="810" alt="Spread’s prepared-meal demo homepage with a featured meal banner and a browsable menu">
+          <figcaption>Spread’s prepared-meal storefront demo.</figcaption>
+        </figure>
       </div>
     </article>
   </section>
