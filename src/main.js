@@ -666,6 +666,7 @@ function sitDown() {
 function enterComputer(nextMode) {
   mode = nextMode;
   keys.clear();
+  updateKeycaps();
   resetJoystick();
   drag = undefined;
   controls.hidden = true;
@@ -701,7 +702,17 @@ openComputer.addEventListener('click', () => {
   revealDesktop();
 });
 stand.addEventListener('click', standUp);
-const movementKeys = ['w', 'a', 's', 'd', 'arrowup', 'arrowleft', 'arrowdown', 'arrowright'];
+const movementKeycaps = [...document.querySelectorAll('[data-keys]')].map(cap => ({
+  cap,
+  bindings: cap.dataset.keys.split(' ')
+}));
+const movementKeys = movementKeycaps.flatMap(({ bindings }) => bindings);
+
+function updateKeycaps() {
+  for (const { cap, bindings } of movementKeycaps) {
+    cap.classList.toggle('is-pressed', bindings.some(key => keys.has(key)));
+  }
+}
 window.addEventListener('keydown', event => {
   const key = event.key.toLowerCase();
   if (key === 'escape') standUp();
@@ -709,11 +720,15 @@ window.addEventListener('keydown', event => {
   if (mode === 'walking' && movementKeys.includes(key)) {
     event.preventDefault();
     keys.add(key);
+    updateKeycaps();
   }
 });
-window.addEventListener('keyup', event => keys.delete(event.key.toLowerCase()));
+window.addEventListener('keyup', event => {
+  if (keys.delete(event.key.toLowerCase())) updateKeycaps();
+});
 window.addEventListener('blur', () => {
   keys.clear();
+  updateKeycaps();
   resetJoystick();
   drag = undefined;
 });
