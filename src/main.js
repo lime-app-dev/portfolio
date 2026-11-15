@@ -3,7 +3,8 @@ import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.j
 import './style.css';
 import { playChair, playFootstep } from './audio.js';
 import { resetDesktop } from './desktop.js';
-import { drawCodexDisplay } from './codex-display.js';
+import { drawCodeEditor } from './code-editor-display.js';
+import { createCoffeeStation, createMug } from './coffee.js';
 
 const sceneElement = document.querySelector('#scene');
 const hint = document.querySelector('#hint');
@@ -393,6 +394,8 @@ const hem = Array.from({ length: 29 }, (_, i) => drapePoint(-0.31 + i * 0.62 / 2
 throwMesh.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(hem), 36, 0.0045, 6), fleece));
 couch.add(throwMesh);
 
+const coffeeStation = createCoffeeStation(scene, box);
+
 const workstationStart = scene.children.length;
 const desk = '#222224';
 box(desk, [2.76, 0.085, 0.91], [-0.09, 0.88, -2.63], scene, 0.03);
@@ -484,7 +487,7 @@ function display(x, angle, secondary) {
     texture.needsUpdate = true;
   }
   if (secondary) {
-    drawCodexDisplay(ctx);
+    drawCodeEditor(ctx);
   } else {
     wallpaper.addEventListener('load', drawDesktop);
     wallpaper.src = import.meta.env.BASE_URL + 'abstract-desktop.jpg';
@@ -499,7 +502,7 @@ function display(x, angle, secondary) {
 
   if (secondary) {
     return (elapsed, reduced) => {
-      drawCodexDisplay(ctx, elapsed, reduced);
+      drawCodeEditor(ctx, elapsed, reduced);
       texture.needsUpdate = true;
     };
   }
@@ -584,11 +587,21 @@ caseShell.material.roughness = 0.27;
 box('#b6b6b3', [0.051, 0.0015, 0.0017], [0, 0.006, 0.0231], chargingCase, 0.0006);
 box('#bdc9b8', [0.0024, 0.0024, 0.0012], [0, 0.0005, 0.0236], chargingCase, 0.0005);
 
+const shopifyLogo = textureLoader.load(import.meta.env.BASE_URL + 'icons/shopify.svg');
+shopifyLogo.colorSpace = THREE.SRGBColorSpace;
+const { mug: deskMug } = createMug('#95bf47', shopifyLogo);
+deskMug.position.set(0.98, 0.926, -1.43);
+deskMug.rotation.y = -0.82;
+scene.add(deskMug);
+
 const deskCenter = 1.63;
 for (const object of scene.children.slice(workstationStart)) object.position.x += deskCenter;
 
 const controls = document.querySelector('#controls');
 const sit = document.querySelector('#sit');
+const brewButton = document.querySelector('#brew-coffee');
+const brewLabel = document.querySelector('#brew-label');
+const coffeeStatus = document.querySelector('#coffee-status');
 const openComputer = document.querySelector('#open-computer');
 const standLabel = document.querySelector('#stand-label');
 const aim = document.querySelector('#aim');
@@ -650,6 +663,16 @@ function nearChair() {
   return Math.hypot(camera.position.x - deskCenter, camera.position.z + 1.54) < 1.12;
 }
 
+function nearCoffee() {
+  const { x, z } = coffeeStation.station.position;
+  return Math.hypot(camera.position.x - x, camera.position.z - z) < 1.5;
+}
+
+function brewCoffee() {
+  if (mode !== 'walking' || !nearCoffee() || coffeeStation.brewing) return;
+  coffeeStation.start(performance.now());
+}
+
 function sitDown() {
   if (mode !== 'walking' || !nearChair()) return;
   standing.copy(camera.position);
@@ -700,6 +723,7 @@ function standUp() {
 }
 
 sit.addEventListener('click', sitDown);
+brewButton.addEventListener('click', brewCoffee);
 openComputer.addEventListener('click', () => {
   if (mode !== 'walking') return;
   enterComputer('browsing');
@@ -720,7 +744,10 @@ function updateKeycaps() {
 window.addEventListener('keydown', event => {
   const key = event.key.toLowerCase();
   if (key === 'escape') standUp();
-  if (key === 'e' && !event.repeat) sitDown();
+  if (key === 'e' && !event.repeat) {
+    if (nearCoffee()) brewCoffee();
+    else sitDown();
+  }
   if (mode === 'walking' && movementKeys.includes(key)) {
     event.preventDefault();
     keys.add(key);
@@ -793,7 +820,8 @@ renderer.domElement.addEventListener('pointerup', event => {
       x: (event.clientX - bounds.left) / bounds.width * 2 - 1,
       y: 1 - (event.clientY - bounds.top) / bounds.height * 2
     }, camera);
-    if (nearChair() && ray.intersectObject(chair, true).length) sitDown();
+    if (nearCoffee() && ray.intersectObject(coffeeStation.station, true).length) brewCoffee();
+    else if (nearChair() && ray.intersectObject(chair, true).length) sitDown();
   }
   drag = undefined;
 });
@@ -819,7 +847,9 @@ const obstacles = [
   [deskCenter + 0.43, deskCenter + 1.46, -2.03, -0.75],
   [deskCenter - 0.46, deskCenter + 0.46, -1.9, -1.12],
   [-3.54, -2.23, -2.4, 0.48],
-  [-3.24, -2.55, 2.36, 3.0]
+  [-3.24, -2.55, 2.36, 3.0],
+  [1.08, 3.24, 2.49, 3.24],
+  [2.54, 3.24, 1.55, 2.65]
 ];
 function walkable(x, z) {
   return Math.abs(x) < 3.24 && Math.abs(z) < 3.24
@@ -856,10 +886,20 @@ renderer.setAnimationLoop(now => {
   const dt = Math.min(Math.max(0, now - lastFrame) / 1000, 0.05);
   lastFrame = now;
   if (mode === 'walking') {
+    coffeeStation.update(now, reduceMotion.matches);
     move(dt);
     const chairNearby = nearChair();
     sit.hidden = !chairNearby;
-    hint.hidden = chairNearby;
+    const coffeeNearby = nearCoffee();
+    brewButton.hidden = !coffeeNearby;
+    const brewing = coffeeStation.brewing;
+    const label = brewing ? 'Brewing…' : coffeeStation.finished ? 'Brew again' : 'Make coffee';
+    if (brewLabel.textContent !== label) brewLabel.textContent = label;
+    brewButton.toggleAttribute('disabled', brewing);
+    coffeeStatus.hidden = !coffeeNearby || !coffeeStation.finished;
+    const status = coffeeStatus.hidden ? '' : 'Coffee ready';
+    if (coffeeStatus.textContent !== status) coffeeStatus.textContent = status;
+    hint.hidden = chairNearby || coffeeNearby;
   }
   if (!computer.hidden) return;
   if (transition) {
