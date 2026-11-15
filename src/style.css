@@ -22,9 +22,13 @@ kbd{margin-left:.35em;font:inherit;opacity:.68}
 #controls button{pointer-events:auto}
 #hint{grid-area:hint;margin:0;padding:.5rem .8rem;border-radius:20px;background:#20271dc9;font: .78rem ui-monospace,monospace}
 .cabin-actions{grid-area:action;justify-self:end}
-#instruction{grid-area:movement;justify-self:start;padding:6px 9px;border-radius:12px;background:#20271dc9}
-.movement-keys{display:grid;grid-template-columns:repeat(3,auto);gap:3px 9px;text-shadow:0 1px 5px #000,0 2px 10px #000}
-.movement-keys>span{display:flex;align-items:center;gap:4px;justify-content:center;font-size:.85rem}
+#instruction{grid-area:movement;justify-self:start}
+.movement-keys{display:grid;grid-template-columns:repeat(3,42px);gap:5px}
+.movement-keys>span{
+  display:grid;place-content:center;justify-items:center;gap:1px;height:38px;
+  border:1px solid #f7efdc54;border-radius:7px;background:#222620ed;color:#f7efdc;
+  box-shadow:0 2px 0 #151813,0 3px 7px #0005;font-size:.8rem;line-height:1;
+}
 .movement-forward{grid-column:2}
 .movement-keys>span:nth-child(2){grid-column:1;grid-row:2}
 .movement-keys kbd{margin:0;opacity:1;font:600 .73rem ui-monospace,monospace}
@@ -152,7 +156,7 @@ kbd{margin-left:.35em;font:inherit;opacity:.68}
 .sound-toggle:hover,.icon-button:hover{background:#fff2;outline:none}
 .sound-toggle:focus-visible,.icon-button:focus-visible{outline:2px solid #d8cbf1;outline-offset:1px}
 #open-computer{display:none}
-.monitor-icon{width:24px;height:24px;background:currentColor;mask:url('/icons/device-desktop.svg') center / contain no-repeat}
+.monitor-icon{width:34px;height:34px;background:currentColor;mask:url('/icons/device-desktop.svg') center / contain no-repeat}
 .sound-toggle[aria-pressed="true"]{color:#e6d1ff}
 .sound-icon{width:24px;height:24px;background:currentColor;mask:url('/icons/volume.svg') center / contain no-repeat}
 .sound-toggle[aria-pressed="false"] .sound-icon{mask-image:url('/icons/volume-off.svg')}
