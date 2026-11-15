@@ -837,8 +837,7 @@ renderer.setAnimationLoop(now => {
     move(dt);
     const chairNearby = nearChair();
     sit.hidden = !chairNearby;
-    const message = chairNearby ? (touchLayout.matches ? 'You’re at the desk' : 'Select the chair or sit down') : 'Walk toward the desk';
-    if (hint.textContent !== message) hint.textContent = message;
+    hint.hidden = chairNearby;
   }
   if (!computer.hidden) return;
   if (transition) {

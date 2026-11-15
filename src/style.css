@@ -14,10 +14,21 @@ button{font:inherit;border-radius:8px;border:1px solid #cabd9b75;background:#242
 button:hover,button:focus-visible{outline:2px solid #d4e8a6;outline-offset:2px}
 kbd{margin-left:.35em;font:inherit;opacity:.68}
 #aim{left:50%;top:50%;transform:translate(-50%,-50%);pointer-events:none;text-shadow:0 0 6px #000}
-#controls{bottom:clamp(16px,4vh,38px);left:0;right:0;text-align:center;pointer-events:none}
+#controls{
+  bottom:clamp(18px,4vh,38px);left:clamp(16px,4vw,48px);right:clamp(16px,4vw,48px);
+  display:grid;grid-template-columns:1fr auto 1fr;grid-template-areas:"movement hint action";
+  align-items:end;text-align:center;pointer-events:none;
+}
 #controls button{pointer-events:auto}
-#hint,#instruction{display:table;margin:.5rem auto;background:#20271de6;border-radius:6px;padding:.45rem .75rem}
-#sit{background:#dac2f4;color:#291b37}
+#hint{grid-area:hint;margin:0;padding:.5rem .8rem;border-radius:20px;background:#20271dc9;font: .78rem ui-monospace,monospace}
+.cabin-actions{grid-area:action;justify-self:end}
+#instruction{grid-area:movement;justify-self:start;padding:6px 9px;border-radius:12px;background:#20271dc9}
+.movement-keys{display:grid;grid-template-columns:repeat(3,auto);gap:3px 9px;text-shadow:0 1px 5px #000,0 2px 10px #000}
+.movement-keys>span{display:flex;align-items:center;gap:4px;justify-content:center;font-size:.85rem}
+.movement-forward{grid-column:2}
+.movement-keys>span:nth-child(2){grid-column:1;grid-row:2}
+.movement-keys kbd{margin:0;opacity:1;font:600 .73rem ui-monospace,monospace}
+#sit{background:#dac2f4;color:#291b37;border-color:transparent;border-radius:24px}
 #joystick{display:none}
 #computer{inset:0;display:flex;flex-direction:column;overflow:hidden;background:#282034;z-index:2;transform-origin:top left;font-family:-apple-system,BlinkMacSystemFont,"DM Sans",system-ui,sans-serif}
 .bar{display:flex;justify-content:space-between;align-items:center;gap:.5rem;background:#1c1626;padding:8px 16px;font:600 .82rem -apple-system,BlinkMacSystemFont,system-ui,sans-serif}
@@ -31,10 +42,11 @@ kbd{margin-left:.35em;font:inherit;opacity:.68}
 }
 .desktop-shortcut{
   display:grid;place-items:center;align-content:center;gap:8px;min-width:104px;min-height:88px;
-  padding:8px;color:#fff;background:transparent;border:1px solid transparent;
+  padding:8px;color:#fff;background:transparent;border:0;
   font-size:.83rem;font-weight:600;text-shadow:0 1px 5px #000;text-decoration:none;
 }
-.desktop-shortcut:hover,.desktop-shortcut:focus-visible{outline:none;background:#eeeaff2b;border-color:#eeeaff65}
+.desktop-shortcut:hover{background:#eeeaff20}
+.desktop-shortcut:focus-visible{outline:2px solid #d8cbf1;outline-offset:2px}
 .folder{position:relative;width:41px;height:29px;background:linear-gradient(#aaddff,#6ab3f9);border-radius:5px;box-shadow:0 3px 10px #16112260}
 .folder::before{content:"";position:absolute;top:-5px;left:0;width:19px;height:9px;background:#91cbff;border-radius:4px 3px 0 0}
 .browser-icon{
@@ -133,10 +145,15 @@ kbd{margin-left:.35em;font:inherit;opacity:.68}
 
 #sound-room{position:fixed;right:max(clamp(16px,4vw,48px),env(safe-area-inset-right));top:max(clamp(18px,4vw,40px),env(safe-area-inset-top))}
 .desktop-actions{display:flex;gap:8px;align-items:center}
-.sound-toggle,.icon-button{display:grid;place-items:center;width:44px;height:44px;padding:0}
+.sound-toggle,.icon-button{
+  display:grid;place-items:center;width:44px;height:44px;padding:0;border:0;border-radius:50%;
+  background:transparent;color:#fff5de;filter:drop-shadow(0 1px 4px #000b);
+}
+.sound-toggle:hover,.icon-button:hover{background:#fff2;outline:none}
+.sound-toggle:focus-visible,.icon-button:focus-visible{outline:2px solid #d8cbf1;outline-offset:1px}
 #open-computer{display:none}
 .monitor-icon{width:24px;height:24px;background:currentColor;mask:url('/icons/device-desktop.svg') center / contain no-repeat}
-.sound-toggle[aria-pressed="true"]{background:#444052}
+.sound-toggle[aria-pressed="true"]{color:#e6d1ff}
 .sound-icon{width:24px;height:24px;background:currentColor;mask:url('/icons/volume.svg') center / contain no-repeat}
 .sound-toggle[aria-pressed="false"] .sound-icon{mask-image:url('/icons/volume-off.svg')}
 body:has(#computer:not([hidden])) #sound-room{visibility:hidden}
@@ -230,7 +247,7 @@ body:has(#computer:not([hidden])) #sound-room{visibility:hidden}
 
 @media (pointer: coarse), (max-width: 640px) {
   #controls{
-    bottom:max(12px,env(safe-area-inset-bottom));
+    display:block;bottom:max(12px,env(safe-area-inset-bottom));
     left:max(12px,env(safe-area-inset-left));
     right:max(12px,env(safe-area-inset-right));
   }

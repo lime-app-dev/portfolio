@@ -15,7 +15,14 @@
     <button id="sit" type="button" hidden>Sit down <kbd>E</kbd></button>
     <button id="open-computer" class="icon-button" type="button" aria-label="Open computer" title="Open computer"><span class="monitor-icon" aria-hidden="true"></span></button>
   </div>
-  <small id="instruction">WASD or arrows to move · Drag to look</small>
+  <div id="instruction" role="group" aria-label="Use WASD or the arrow keys to move. Drag to look around.">
+    <span class="movement-keys" aria-hidden="true">
+      <span class="movement-forward">↑ <kbd>W</kbd></span>
+      <span>← <kbd>A</kbd></span>
+      <span>↓ <kbd>S</kbd></span>
+      <span>→ <kbd>D</kbd></span>
+    </span>
+  </div>
 </footer>
 <section id="computer" aria-label="Studio computer" hidden>
   <div class="bar">
