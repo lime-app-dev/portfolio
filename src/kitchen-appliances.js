@@ -114,13 +114,19 @@ export function addKitchenAppliances(scene, box) {
 
 export function createFridge(scene, box) {
   const fridge = new THREE.Group();
-  fridge.position.set(3.10, 0, 1.05);
+  fridge.position.set(3.125, 0, 1.32);
+  fridge.scale.set(1.18, 1.16, 1.12);
   fridge.rotation.y = -Math.PI / 2;
   scene.add(fridge);
-  const shell = '#45494e';
-  box(shell, [0.66, 1.72, 0.09], [0, 0.86, -0.233], fridge, 0.016);
-  for (const x of [-0.308, 0.308]) box(shell, [0.049, 1.72, 0.53], [x, 0.86, 0.005], fridge, 0.013);
-  for (const y of [0.051, 1.679]) box(shell, [0.615, 0.082, 0.53], [0, y, 0.005], fridge, 0.012);
+  const silver = new THREE.MeshStandardMaterial({ color: '#c5cbd1', metalness: 0.43, roughness: 0.29 });
+  function metalPanel(size, position, parent, radius = 0.012) {
+    const panel = box('#ffffff', size, position, parent, radius);
+    panel.material.dispose();
+    panel.material = silver;
+  }
+  metalPanel([0.66, 1.72, 0.09], [0, 0.86, -0.233], fridge);
+  for (const x of [-0.308, 0.308]) metalPanel([0.049, 1.72, 0.53], [x, 0.86, 0.005], fridge);
+  for (const y of [0.051, 1.679]) metalPanel([0.615, 0.082, 0.53], [0, y, 0.005], fridge);
   box('#d9e0de', [0.568, 1.53, 0.015], [0, 0.863, -0.182], fridge);
   for (const y of [0.27, 0.69, 1.08, 1.43]) box('#d4e1df', [0.568, 0.025, 0.405], [0, y, 0.016], fridge, 0.006);
   box('#c9d7d2', [0.47, 0.104, 0.32], [0, 0.33, 0.034], fridge, 0.018);
@@ -140,15 +146,45 @@ export function createFridge(scene, box) {
   const hinge = new THREE.Group();
   hinge.position.set(-0.331, 0, 0.27);
   fridge.add(hinge);
-  const graphite = brushedMetal('#62656b', 0.55);
-  function doorFace(size, position, parent) {
-    const panel = box('#62656b', size, position, parent, 0.016);
-    panel.material.dispose();
-    panel.material = graphite;
-  }
   box('#26282d', [0.651, 0.023, 0.069], [0, 0.611, 0.295], fridge, 0.006);
-  doorFace([0.662, 0.567, 0.069], [0, 0.306, 0.304], fridge);
-  doorFace([0.662, 1.071, 0.068], [0.331, 1.173, 0.034], hinge);
+  metalPanel([0.662, 0.567, 0.069], [0, 0.306, 0.304], fridge);
+
+  // Cut the dispenser opening into the silver door skin.
+  const doorSkin = new THREE.Shape();
+  doorSkin.moveTo(0, 0.638);
+  doorSkin.lineTo(0.662, 0.638);
+  doorSkin.lineTo(0.662, 1.708);
+  doorSkin.lineTo(0, 1.708);
+  doorSkin.closePath();
+  const dispenserOpening = new THREE.Path();
+  dispenserOpening.moveTo(0.202, 0.985);
+  dispenserOpening.lineTo(0.202, 1.35);
+  dispenserOpening.lineTo(0.46, 1.35);
+  dispenserOpening.lineTo(0.46, 0.985);
+  dispenserOpening.closePath();
+  doorSkin.holes.push(dispenserOpening);
+  const skin = new THREE.Mesh(
+    new THREE.ExtrudeGeometry(doorSkin, { depth: 0.06, bevelEnabled: false }),
+    silver
+  );
+  skin.castShadow = true;
+  skin.receiveShadow = true;
+  hinge.add(skin);
+
+  const dispenser = new THREE.Group();
+  dispenser.position.set(0.331, 1.1675, 0);
+  hinge.add(dispenser);
+  box('#252932', [0.268, 0.375, 0.024], [0, 0, 0.006], dispenser, 0.006);
+  for (const x of [-0.121, 0.121]) box('#303640', [0.019, 0.359, 0.051], [x, 0, 0.034], dispenser, 0.004);
+  box('#313640', [0.245, 0.073, 0.057], [0, 0.142, 0.035], dispenser, 0.005);
+  box('#151c26', [0.102, 0.029, 0.003], [0, 0.145, 0.065], dispenser, 0.004);
+  box('#91cdf1', [0.038, 0.005, 0.002], [0, 0.145, 0.067], dispenser);
+  metalPanel([0.038, 0.027, 0.027], [0, 0.087, 0.043], dispenser, 0.004);
+  box('#3f464e', [0.066, 0.117, 0.015], [0, -0.019, 0.024], dispenser, 0.007);
+  metalPanel([0.24, 0.023, 0.055], [0, -0.16, 0.034], dispenser, 0.005);
+  for (const x of [-0.08, -0.04, 0, 0.04, 0.08]) {
+    box('#222832', [0.016, 0.002, 0.031], [x, -0.147, 0.035], dispenser);
+  }
   box('#24262b', [0.64, 0.026, 0.061], [0.331, 0.641, 0.031], hinge, 0.005);
   box('#d5dfdc', [0.601, 1.017, 0.026], [0.331, 1.169, -0.006], hinge, 0.013);
   for (const y of [0.82, 1.18]) {
