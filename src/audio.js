@@ -13,6 +13,13 @@ const activeEffects = new Set();
 let enabled = false;
 let playbackAttempt = 0;
 let context;
+let rainGain;
+let usingComputer = false;
+
+export function setComputerAmbience(active) {
+  usingComputer = active;
+  rainGain?.gain.setTargetAtTime(active ? 0.012 : 0.028, context.currentTime, 0.15);
+}
 let previousStep = -1;
 
 function updateToggles(tooltip) {
@@ -63,7 +70,8 @@ async function prepareEffects() {
     context = new AudioContext();
     for (const [track, level] of [[music, 0.23], [rain, 0.028]]) {
       const gain = context.createGain();
-      gain.gain.value = level;
+      gain.gain.value = track === rain && usingComputer ? 0.012 : level;
+      if (track === rain) rainGain = gain;
       context.createMediaElementSource(track).connect(gain).connect(context.destination);
     }
   }

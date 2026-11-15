@@ -320,3 +320,13 @@ body:has(#computer:not([hidden])) #sound-room{visibility:hidden}
   #joystick{width:62px;height:62px}
   #hint{font-size:.68rem;padding-inline:.5rem}
 }
+
+.portfolio-role{margin:.5rem 0 0;font-size:clamp(.75rem,2.5vw,1rem);color:#faf4e5}
+#open-computer{position:relative}
+.monitor-label{position:absolute;top:100%;right:0;white-space:nowrap;font:600 .65rem system-ui;text-shadow:0 1px 5px #000,0 0 8px #000}
+#copy-window-link{position:absolute;right:8px;padding:5px 8px;border:0;border-radius:5px;background:#dedee5;color:#242530;font:600 .7rem system-ui}
+.share-status,#share-url{flex:none;padding:.5rem 1rem;color:#242530;background:#f5f5fa;font-size:.8rem}
+.project-story{padding:clamp(16px,3vw,28px);border-bottom:1px solid #dedee5}
+.project-story h3{margin:0 0 1rem}
+.project-story ol,.story-images{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:12px;margin:0;padding:0}
+.project-story li{list-style-position:inside;padding:12px;border-radius:8px;background:#ebedf4;color:#242530;font-size:.85rem;line-height:1.5}

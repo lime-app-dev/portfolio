@@ -3,7 +3,7 @@
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#252622"><title>Bernardine Richards | Portfolio</title></head>
 <body>
 <div id="scene" aria-label="3D working studio"></div>
-<header><span>PORTFOLIO</span><h1>Bernardine Richards</h1></header>
+<header><span>PORTFOLIO</span><h1>Bernardine Richards</h1><p class="portfolio-role">Senior Frontend Developer · Shopify themes and apps</p></header>
 <button id="sound-room" class="sound-toggle" type="button" aria-label="Sound" aria-pressed="false" title="Turn sound on"><span class="sound-icon" aria-hidden="true"></span></button>
 <div id="aim" aria-hidden="true">+</div>
 <footer id="controls">
@@ -15,7 +15,7 @@
     <button id="sit" type="button" hidden>Sit down <kbd>E</kbd></button>
     <button id="brew-coffee" type="button" hidden><span id="brew-label">Make coffee</span> <kbd>E</kbd></button>
     <button id="fridge-door" type="button" hidden><span id="fridge-label">Open fridge</span> <kbd>E</kbd></button>
-    <button id="open-computer" class="icon-button" type="button" aria-label="Open computer" title="Open computer"><span class="monitor-icon" aria-hidden="true"></span></button>
+    <button id="open-computer" class="icon-button" type="button" title="View my work"><span class="monitor-icon" aria-hidden="true"></span><span class="monitor-label">View my work</span></button>
   </div>
   <p id="coffee-status" role="status" hidden></p>
   <div id="instruction" role="group" aria-label="Use WASD or the arrow keys to move. Drag to look around.">
@@ -39,6 +39,7 @@
     <button id="open-experience" class="desktop-shortcut" data-open-folder="experience" type="button"><span class="folder" aria-hidden="true"></span>Work experience</button>
     <button id="open-projects" class="desktop-shortcut" data-open-folder="projects" type="button"><span class="folder" aria-hidden="true"></span>Projects</button>
     <a class="desktop-shortcut" href="https://www.linkedin.com/in/bernardine-richards-2ba6a544b/" target="_blank" rel="noopener noreferrer"><span class="browser-icon" aria-hidden="true"></span>LinkedIn</a>
+    <button id="open-contact" class="desktop-shortcut" data-open-folder="contact" type="button"><span class="folder" aria-hidden="true"></span>Contact</button>
   </div>
 
   <section id="desktop-window" class="mac-window" aria-labelledby="window-title" hidden>
@@ -49,9 +50,16 @@
         <button class="light-zoom" data-window-action="zoom" type="button" aria-label="Expand window" aria-pressed="false" title="Expand"></button>
       </div>
       <span id="window-title">Projects</span>
+      <button id="copy-window-link" type="button" hidden>Copy link</button>
     </div>
+    <div id="share-status" class="share-status" role="status" hidden></div>
+    <input id="share-url" aria-label="Link to this window" readonly hidden>
     <div class="folder-toolbar" hidden>
       <button class="folder-back" data-open-folder="projects" type="button"><span aria-hidden="true">‹</span> Projects</button>
+    </div>
+    <div class="window-content folder-content" data-folder="contact" hidden>
+      <h2 tabindex="-1">Contact</h2>
+      <a class="project-source" href="https://www.linkedin.com/in/bernardine-richards-2ba6a544b/" target="_blank" rel="noopener noreferrer">Connect on LinkedIn <span aria-hidden="true">↗</span></a>
     </div>
     <div class="window-content folder-content" data-folder="projects" hidden>
       <h2 tabindex="-1">Projects</h2>
@@ -113,6 +121,14 @@
         <p class="project-description">I worked on both sides of Lime Bundles: how merchants set up offers in Shopify’s theme editor, and how shoppers build a bundle and add it to the cart.</p>
         <a class="project-source" href="https://apps.shopify.com/lime-bundles" target="_blank" rel="noopener noreferrer">Shopify App Store listing <span aria-hidden="true">↗</span></a>
       </div>
+      <section class="project-story" aria-labelledby="lime-story">
+        <h3 id="lime-story">Getting a complete bundle into the cart</h3>
+        <ol>
+          <li><strong>Verify the add.</strong> Check that every expected bundle item made it into the cart. Roll back incomplete adds.</li>
+          <li><strong>Refresh the drawer.</strong> Use the theme’s cart update flow when the drawer supports it.</li>
+          <li><strong>Fall back to the cart page.</strong> Show the completed bundle there when the drawer can’t be reliably updated.</li>
+        </ol>
+      </section>
       <div class="project-detail">
         <figure class="project-image">
           <img src="/projects/lime-build-a-box.png" width="960" height="540" alt="Lime Bundles build-a-box interface beside a completed bundle with its savings shown">
@@ -135,6 +151,19 @@
         <p class="project-description">I developed Spread for prepared-meal and food retailers. The project focused on helping shoppers find meals and compare the details that matter before building an order.</p>
         <span class="project-status">In Shopify Theme Store review</span>
       </div>
+      <section class="project-story" aria-labelledby="spread-story">
+        <h3 id="spread-story">From product data to a nutrition table</h3>
+        <div class="story-images">
+          <figure class="project-image">
+            <img src="/projects/spread-product-values.webp" loading="lazy" alt="Shopify product editor showing values for Fat, Saturates, Carbohydrate and Sugars">
+            <figcaption>1. The merchant enters nutrition values in the product’s Shopify metafields.</figcaption>
+          </figure>
+          <figure class="project-image">
+            <img src="/projects/spread-storefront-table.webp" loading="lazy" alt="Nutrition details displayed in a table on Spread’s product page">
+            <figcaption>2. Spread renders those values as a table shoppers can scan on the product page.</figcaption>
+          </figure>
+        </div>
+      </section>
       <div class="project-detail">
         <figure class="project-image">
           <img src="/projects/spread.jpg" width="1240" height="810" alt="Spread’s prepared-meal demo homepage with a featured meal banner and a browsable menu">

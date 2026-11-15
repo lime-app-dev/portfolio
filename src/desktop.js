@@ -4,7 +4,31 @@ const title = document.querySelector('#window-title');
 const toolbar = windowElement.querySelector('.folder-toolbar');
 const panels = [...windowElement.querySelectorAll('[data-folder]')];
 const zoom = windowElement.querySelector('[data-window-action="zoom"]');
+const shareButton = document.querySelector('#copy-window-link');
+const shareStatus = document.querySelector('#share-status');
+const shareInput = document.querySelector('#share-url');
+const folderHashes = new Map([
+  ['experience', '#work-experience'],
+  ['lime-bundles', '#lime-bundles'],
+  ['spread', '#spread']
+]);
+
+export function linkedFolder() {
+  return [...folderHashes].find(([, hash]) => hash === location.hash)?.[0];
+}
+
+export function clearFolderLink() {
+  if (linkedFolder()) history.replaceState(null, '', location.pathname + location.search);
+}
+
+function updateShareControls(folder) {
+  shareButton.hidden = !folderHashes.has(folder);
+  shareStatus.hidden = true;
+  shareInput.hidden = true;
+}
+
 const desktopShortcuts = {
+  contact: document.querySelector('#open-contact'),
   projects: document.querySelector('#open-projects'),
   experience: document.querySelector('#open-experience')
 };
@@ -21,12 +45,17 @@ export function resetDesktop() {
   setExpanded(false);
   for (const panel of panels) panel.scrollTop = 0;
   currentFolder = 'projects';
+  updateShareControls();
 }
 
-function openFolder(folder, returnFrom) {
+export function openFolder(folder, returnFrom) {
   const selected = panels.find(panel => panel.dataset.folder === folder);
   if (!selected) return;
   currentFolder = folder;
+  updateShareControls(folder);
+  const hash = folderHashes.get(folder);
+  if (hash) history.replaceState(null, '', hash);
+  else clearFolderLink();
   windowElement.hidden = false;
   toolbar.hidden = !selected.dataset.parentFolder;
   for (const panel of panels) panel.hidden = panel !== selected;
@@ -57,5 +86,23 @@ computer.addEventListener('click', event => {
       windowElement.hidden = true;
       break;
   }
+  clearFolderLink();
   desktopShortcut.focus();
+});
+
+shareButton.addEventListener('click', async () => {
+  const folder = currentFolder;
+  const url = new URL(location.href);
+  url.hash = folderHashes.get(folder);
+  try {
+    await navigator.clipboard.writeText(url.href);
+    if (currentFolder !== folder || windowElement.hidden) return;
+    shareStatus.textContent = 'Link copied';
+    shareStatus.hidden = false;
+  } catch {
+    if (currentFolder !== folder || windowElement.hidden) return;
+    shareInput.value = url.href;
+    shareInput.hidden = false;
+    shareInput.select();
+  }
 });

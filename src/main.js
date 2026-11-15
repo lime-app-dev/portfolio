@@ -1,8 +1,8 @@
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import './style.css';
-import { playChair, playCoffeeBrew, playFootstep, playFridgeDoor } from './audio.js';
-import { resetDesktop } from './desktop.js';
+import { playChair, playCoffeeBrew, playFootstep, playFridgeDoor, setComputerAmbience } from './audio.js';
+import { clearFolderLink, linkedFolder, openFolder, resetDesktop } from './desktop.js';
 import { drawCodeEditor } from './code-editor-display.js';
 import { createCoffeeStation, createMug } from './coffee.js';
 import { addKitchenAppliances, createFridge } from './kitchen-appliances.js';
@@ -216,6 +216,25 @@ const glazing = new THREE.Mesh(
 );
 glazing.position.set(0, 1.645, windowZ);
 scene.add(glazing);
+
+const reflectionCanvas = document.createElement('canvas');
+reflectionCanvas.width = 256;
+reflectionCanvas.height = 128;
+const reflectionContext = reflectionCanvas.getContext('2d');
+const reflection = reflectionContext.createLinearGradient(0, 0, 215, 110);
+reflection.addColorStop(0.32, '#ffffff00');
+reflection.addColorStop(0.46, '#ffffff34');
+reflection.addColorStop(0.57, '#ffffff08');
+reflection.addColorStop(0.73, '#ffffff00');
+reflectionContext.fillStyle = reflection;
+reflectionContext.fillRect(0, 0, 256, 128);
+const reflectionTexture = new THREE.CanvasTexture(reflectionCanvas);
+const windowReflection = new THREE.Mesh(glazing.geometry, new THREE.MeshBasicMaterial({
+  map: reflectionTexture, color: '#dfeaff', transparent: true, opacity: 0.19, depthWrite: false
+}));
+windowReflection.position.copy(glazing.position);
+windowReflection.position.z += 0.006;
+scene.add(windowReflection);
 
 const streakCount = 1050;
 const drops = new Float32Array(streakCount * 6);
@@ -597,6 +616,10 @@ deskMug.position.set(-1.14, 0.926, -2.43);
 deskMug.rotation.y = 0.42;
 scene.add(deskMug);
 
+const deskFill = new THREE.PointLight('#e5eeff', 2.2, 2.8);
+deskFill.position.set(-0.28, 1.96, -1.97);
+scene.add(deskFill);
+
 const deskCenter = 1.63;
 for (const object of scene.children.slice(workstationStart)) object.position.x += deskCenter;
 
@@ -711,6 +734,7 @@ function sitDown() {
 
 function enterComputer(nextMode) {
   mode = nextMode;
+  setComputerAmbience(true);
   keys.clear();
   updateKeycaps();
   resetJoystick();
@@ -733,6 +757,8 @@ function standUp() {
   strideDistance = strideLength / 2;
   transition = null;
   mode = 'walking';
+  setComputerAmbience(false);
+  clearFolderLink();
   computer.getAnimations().forEach(animation => animation.cancel());
   computer.hidden = true;
   controls.hidden = false;
@@ -958,3 +984,16 @@ renderer.setAnimationLoop(now => {
   camera.rotation.set(pitch, yaw, 0);
   renderer.render(scene, camera);
 });
+
+
+function revealLinkedFolder() {
+  const folder = linkedFolder();
+  if (!folder) return;
+  if (mode === 'walking') enterComputer('browsing');
+  transition = null;
+  if (computer.hidden) revealDesktop();
+  openFolder(folder);
+}
+
+window.addEventListener('hashchange', revealLinkedFolder);
+revealLinkedFolder();
