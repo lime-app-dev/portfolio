@@ -394,7 +394,7 @@ const hem = Array.from({ length: 29 }, (_, i) => drapePoint(-0.31 + i * 0.62 / 2
 throwMesh.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(hem), 36, 0.0045, 6), fleece));
 couch.add(throwMesh);
 
-const coffeeStation = createCoffeeStation(scene, box);
+const coffeeStation = createCoffeeStation(scene, box, textureLoader);
 
 const workstationStart = scene.children.length;
 const desk = '#222224';

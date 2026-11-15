@@ -32,22 +32,55 @@ export function createMug(color, logo = null) {
   return { mug, coffee };
 }
 
-export function createCoffeeStation(scene, box) {
-  const cabinet = '#323432';
-  const worktop = '#a69a85';
-  box(cabinet, [2.15, 0.89, 0.60], [2.28, 0.445, 3.00], scene, 0.02);
-  box(worktop, [2.22, 0.065, 0.66], [2.28, 0.91, 2.99], scene, 0.019);
-  box(cabinet, [0.58, 0.89, 1.04], [3.06, 0.445, 2.23], scene, 0.02);
-  box(worktop, [0.64, 0.065, 1.05], [3.06, 0.91, 2.23], scene, 0.018);
-  box('#3e4240', [2.16, 0.32, 0.04], [2.27, 1.1, 3.41], scene, 0.009);
-  for (const x of [1.58, 2.22, 2.86]) {
-    box('#4c504c', [0.58, 0.71, 0.032], [x, 0.45, 2.689], scene, 0.009);
-    box('#a5a598', [0.15, 0.017, 0.029], [x, 0.73, 2.661], scene, 0.006);
+export function createCoffeeStation(scene, box, textureLoader) {
+  function finish(file, roughness, bumpScale) {
+    const texture = textureLoader.load(import.meta.env.BASE_URL + 'kitchen/' + file);
+    texture.colorSpace = THREE.SRGBColorSpace;
+    texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+    return new THREE.MeshStandardMaterial({ map: texture, bumpMap: texture, roughness, bumpScale });
   }
-  for (const z of [1.99, 2.44]) {
-    box('#4c504c', [0.032, 0.71, 0.40], [2.759, 0.45, z], scene, 0.009);
-    box('#a5a598', [0.029, 0.017, 0.13], [2.735, 0.73, z], scene, 0.006);
+  const charcoal = finish('charcoal-oak.jpg', 0.76, 0.006);
+  const quartz = finish('white-quartz.jpg', 0.34, 0.002);
+  const brass = new THREE.MeshStandardMaterial({ color: '#99805a', metalness: 0.55, roughness: 0.42 });
+
+  function finishedBox(material, size, position, parent, radius) {
+    const mesh = box('#ffffff', size, position, parent, radius);
+    mesh.material.dispose();
+    mesh.material = material;
+    const { position: points, normal, uv } = mesh.geometry.attributes;
+    for (let i = 0; i < points.count; i += 1) {
+      const top = Math.abs(normal.getY(i)) > 0.6;
+      const side = Math.abs(normal.getX(i)) > 0.6;
+      const x = points.getX(i) + position[0];
+      const y = points.getY(i) + position[1];
+      const z = points.getZ(i) + position[2];
+      uv.setXY(i, (side && !top ? z : x) * 0.83, (top ? z : y) * 0.83);
+    }
+    return mesh;
   }
+
+  finishedBox(charcoal, [2.15, 0.89, 0.60], [2.28, 0.445, 3.00], scene, 0.02);
+  finishedBox(quartz, [2.27, 0.065, 0.78], [2.305, 0.91, 3.05], scene, 0.009);
+  finishedBox(charcoal, [0.58, 0.89, 1.04], [3.06, 0.445, 2.23], scene, 0.02);
+  finishedBox(quartz, [0.70, 0.065, 0.95], [3.09, 0.91, 2.185], scene, 0.009);
+  finishedBox(quartz, [2.25, 0.20, 0.021], [2.295, 1.037, 3.427], scene, 0.004);
+  finishedBox(quartz, [0.021, 0.20, 1.71], [3.427, 1.037, 2.56], scene, 0.004);
+
+  function cupboard(x, z, angle, width) {
+    const door = new THREE.Group();
+    door.position.set(x, 0.465, z);
+    door.rotation.y = angle;
+    scene.add(door);
+
+    finishedBox(charcoal, [width, 0.71, 0.021], [0, 0, 0], door, 0.006);
+    for (const edge of [-1, 1]) {
+      finishedBox(charcoal, [0.051, 0.71, 0.016], [edge * (width / 2 - 0.026), 0, 0.013], door, 0.004);
+      finishedBox(charcoal, [width - 0.102, 0.054, 0.016], [0, edge * 0.328, 0.013], door, 0.004);
+    }
+    finishedBox(brass, [0.14, 0.017, 0.023], [0, 0.255, 0.027], door, 0.006);
+  }
+  for (const x of [1.57, 2.12, 2.67]) cupboard(x, 2.686, Math.PI, 0.52);
+  for (const z of [1.97, 2.43]) cupboard(2.750, z, -Math.PI / 2, 0.42);
   box('#33393a', [0.38, 0.025, 0.40], [3.05, 0.953, 2.18], scene, 0.018);
   box('#212629', [0.31, 0.012, 0.33], [3.05, 0.967, 2.18], scene, 0.015);
   const faucetPath = new THREE.CatmullRomCurve3([
@@ -56,7 +89,7 @@ export function createCoffeeStation(scene, box) {
   ]);
   const faucet = new THREE.Mesh(
     new THREE.TubeGeometry(faucetPath, 20, 0.013, 8),
-    new THREE.MeshStandardMaterial({ color: '#787e80', metalness: 0.68, roughness: 0.32 })
+    new THREE.MeshStandardMaterial({ color: '#ad9167', metalness: 0.62, roughness: 0.3 })
   );
   faucet.castShadow = true;
   scene.add(faucet);
