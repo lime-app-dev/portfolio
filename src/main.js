@@ -585,11 +585,15 @@ for (const object of scene.children.slice(workstationStart)) object.position.x +
 
 const controls = document.querySelector('#controls');
 const sit = document.querySelector('#sit');
+const openComputer = document.querySelector('#open-computer');
+const standLabel = document.querySelector('#stand-label');
 const aim = document.querySelector('#aim');
 const computer = document.querySelector('#computer');
 const openProjects = document.querySelector('#open-projects');
 const stand = document.querySelector('#stand');
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
+const touchLayout = matchMedia('(pointer: coarse), (max-width: 640px)');
+const movementPointers = new Map();
 const keys = new Set();
 const doorway = new THREE.Vector3(0.27, 1.64, 2.91);
 const seated = new THREE.Vector3(deskCenter, 1.42, -1.57);
@@ -611,7 +615,7 @@ function monitorView(distance) {
 
 function revealDesktop(distance) {
   computer.hidden = false;
-  if (!reduceMotion.matches) {
+  if (distance && !reduceMotion.matches && !touchLayout.matches) {
     const height = screenHeight / (distance * 2 * Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2));
     const width = height * screenWidth / (screenHeight * camera.aspect);
     computer.animate([
@@ -644,12 +648,8 @@ function sitDown() {
   standingYaw = yaw;
   standingPitch = pitch;
   const distance = monitorDistance();
-  mode = 'sitting';
+  enterComputer('sitting');
   playChair(false);
-  keys.clear();
-  controls.hidden = true;
-  aim.hidden = true;
-  resetDesktop();
   transition = {
     start: performance.now(),
     path: new THREE.QuadraticBezierCurve3(camera.position.clone(), seated, monitorView(distance)),
@@ -659,23 +659,43 @@ function sitDown() {
   };
 }
 
+function enterComputer(nextMode) {
+  mode = nextMode;
+  keys.clear();
+  movementPointers.clear();
+  drag = undefined;
+  controls.hidden = true;
+  aim.hidden = true;
+  standLabel.textContent = mode === 'sitting' ? 'Stand up' : 'Back to cabin';
+  resetDesktop();
+}
+
 function standUp() {
-  if (mode !== 'sitting') return;
-  playChair(true);
+  if (mode === 'walking') return;
+  const wasSitting = mode === 'sitting';
+  if (wasSitting) {
+    playChair(true);
+    camera.position.copy(standing);
+    yaw = standingYaw;
+    pitch = standingPitch;
+  }
   strideDistance = strideLength / 2;
   transition = null;
   mode = 'walking';
-  camera.position.copy(standing);
-  yaw = standingYaw;
-  pitch = standingPitch;
   computer.getAnimations().forEach(animation => animation.cancel());
   computer.hidden = true;
   controls.hidden = false;
   aim.hidden = false;
-  sit.focus();
+  if (wasSitting) sit.focus();
+  else openComputer.focus();
 }
 
 sit.addEventListener('click', sitDown);
+openComputer.addEventListener('click', () => {
+  if (mode !== 'walking') return;
+  enterComputer('browsing');
+  revealDesktop();
+});
 stand.addEventListener('click', standUp);
 const movementKeys = ['w', 'a', 's', 'd', 'arrowup', 'arrowleft', 'arrowdown', 'arrowright'];
 window.addEventListener('keydown', event => {
@@ -688,47 +708,64 @@ window.addEventListener('keydown', event => {
   }
 });
 window.addEventListener('keyup', event => keys.delete(event.key.toLowerCase()));
-window.addEventListener('blur', () => { keys.clear(); drag = undefined; });
+window.addEventListener('blur', () => {
+  keys.clear();
+  movementPointers.clear();
+  drag = undefined;
+});
 for (const button of document.querySelectorAll('[data-move]')) {
   const key = button.dataset.move.toLowerCase();
   button.addEventListener('pointerdown', event => {
+    if (mode !== 'walking' || event.button !== 0) return;
     button.setPointerCapture(event.pointerId);
-    keys.add(key);
+    movementPointers.set(event.pointerId, key);
   });
-  button.addEventListener('lostpointercapture', () => keys.delete(key));
+  button.addEventListener('lostpointercapture', event => movementPointers.delete(event.pointerId));
 }
 
 const ray = new THREE.Raycaster();
 renderer.domElement.addEventListener('pointerdown', event => {
-  if (mode !== 'walking' || event.button !== 0) return;
+  if (mode !== 'walking' || drag || event.button !== 0) return;
   renderer.domElement.setPointerCapture(event.pointerId);
-  drag = { x: event.clientX, y: event.clientY, distance: 0 };
+  drag = { pointerId: event.pointerId, x: event.clientX, y: event.clientY, distance: 0 };
 });
 renderer.domElement.addEventListener('pointermove', event => {
-  if (!drag || mode !== 'walking') return;
+  if (drag?.pointerId !== event.pointerId || mode !== 'walking') return;
   const dx = event.clientX - drag.x;
   const dy = event.clientY - drag.y;
-  drag = { x: event.clientX, y: event.clientY, distance: drag.distance + Math.hypot(dx, dy) };
+  drag.x = event.clientX;
+  drag.y = event.clientY;
+  drag.distance += Math.hypot(dx, dy);
   yaw -= dx * 0.004;
   pitch = THREE.MathUtils.clamp(pitch - dy * 0.004, -1.1, 1.1);
 });
 renderer.domElement.addEventListener('pointerup', event => {
-  if (drag?.distance < 7 && mode === 'walking') {
-    ray.setFromCamera({ x: event.clientX / innerWidth * 2 - 1, y: 1 - event.clientY / innerHeight * 2 }, camera);
+  if (drag?.pointerId !== event.pointerId) return;
+  if (drag.distance < 7 && mode === 'walking') {
+    const bounds = renderer.domElement.getBoundingClientRect();
+    ray.setFromCamera({
+      x: (event.clientX - bounds.left) / bounds.width * 2 - 1,
+      y: 1 - (event.clientY - bounds.top) / bounds.height * 2
+    }, camera);
     if (nearChair() && ray.intersectObject(chair, true).length) sitDown();
   }
   drag = undefined;
 });
-renderer.domElement.addEventListener('lostpointercapture', () => { drag = undefined; });
+renderer.domElement.addEventListener('lostpointercapture', event => {
+  if (drag?.pointerId === event.pointerId) drag = undefined;
+});
 
 function resize() {
-  renderer.setSize(innerWidth, innerHeight);
-  camera.aspect = innerWidth / innerHeight;
+  const { clientWidth: width, clientHeight: height } = sceneElement;
+  if (!width || !height) return;
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, touchLayout.matches ? 1.25 : 1.75));
+  renderer.setSize(width, height, false);
+  camera.aspect = width / height;
   const verticalFov = THREE.MathUtils.radToDeg(2 * Math.atan(Math.tan(THREE.MathUtils.degToRad(37)) / camera.aspect));
   camera.fov = THREE.MathUtils.clamp(verticalFov, 58, 100);
   camera.updateProjectionMatrix();
 }
-window.addEventListener('resize', resize);
+new ResizeObserver(resize).observe(sceneElement);
 resize();
 
 const obstacles = [
@@ -743,8 +780,10 @@ function walkable(x, z) {
     && obstacles.every(([left, right, back, front]) => x < left || x > right || z < back || z > front);
 }
 function move(dt) {
-  const forward = Number(keys.has('w') || keys.has('arrowup')) - Number(keys.has('s') || keys.has('arrowdown'));
-  const side = Number(keys.has('d') || keys.has('arrowright')) - Number(keys.has('a') || keys.has('arrowleft'));
+  const pressed = new Set([...keys, ...movementPointers.values()]);
+  const forward = Number(pressed.has('w') || pressed.has('arrowup')) - Number(pressed.has('s') || pressed.has('arrowdown'));
+  const side = Number(pressed.has('d') || pressed.has('arrowright')) - Number(pressed.has('a') || pressed.has('arrowleft'));
+  if (!forward && !side) return;
   const distance = 2.25 * dt / (Math.hypot(forward, side) || 1);
   const startX = camera.position.x;
   const startZ = camera.position.z;
@@ -769,9 +808,10 @@ renderer.setAnimationLoop(now => {
     move(dt);
     const chairNearby = nearChair();
     sit.hidden = !chairNearby;
-    const message = chairNearby ? 'Select the chair or sit down' : 'Walk toward the desk';
+    const message = chairNearby ? (touchLayout.matches ? 'You’re at the desk' : 'Select the chair or sit down') : 'Walk toward the desk';
     if (hint.textContent !== message) hint.textContent = message;
   }
+  if (!computer.hidden) return;
   if (transition) {
     const progress = reduceMotion.matches ? 1 : Math.min(1, Math.max(0, (now - transition.start) / 1140));
     const eased = THREE.MathUtils.smoothstep(progress, 0, 1);

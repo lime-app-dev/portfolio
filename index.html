@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#252622"><title>Bernardine Richards | Portfolio</title></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#252622"><title>Bernardine Richards | Portfolio</title></head>
 <body>
 <div id="scene" aria-label="3D working studio"></div>
 <header><span>PORTFOLIO</span><h1>Bernardine Richards</h1></header>
@@ -8,21 +8,24 @@
 <div id="aim" aria-hidden="true">+</div>
 <footer id="controls">
   <p id="hint" aria-live="polite">Walk toward the desk</p>
-  <button id="sit" type="button" hidden>Sit down <kbd>E</kbd></button>
-  <div id="directions" aria-label="Movement controls">
-    <button data-move="ArrowLeft" aria-label="Move left">←</button>
-    <button data-move="ArrowUp" aria-label="Move forward">↑</button>
-    <button data-move="ArrowDown" aria-label="Move backward">↓</button>
-    <button data-move="ArrowRight" aria-label="Move right">→</button>
+  <div class="cabin-actions">
+    <div id="directions" role="group" aria-label="Movement controls">
+      <button data-move="ArrowUp" aria-label="Move forward" type="button">↑</button>
+      <button data-move="ArrowLeft" aria-label="Move left" type="button">←</button>
+      <button data-move="ArrowDown" aria-label="Move backward" type="button">↓</button>
+      <button data-move="ArrowRight" aria-label="Move right" type="button">→</button>
+    </div>
+    <button id="sit" type="button" hidden>Sit down <kbd>E</kbd></button>
+    <button id="open-computer" type="button">Open computer</button>
   </div>
-  <small id="instruction">WASD or arrows to move · Drag to look</small>
+  <small id="instruction"><span class="keyboard-help">WASD or arrows to move · Drag to look</span><span class="touch-help">Hold an arrow to move · Swipe to look</span></small>
 </footer>
 <section id="computer" aria-label="Studio computer" hidden>
   <div class="bar">
     <span>Finder</span>
     <div class="desktop-actions">
       <button class="sound-toggle" type="button" aria-label="Sound" aria-pressed="false" title="Turn sound on"><span class="sound-icon" aria-hidden="true"></span></button>
-      <button id="stand" type="button">Stand up <kbd>Esc</kbd></button>
+      <button id="stand" type="button"><span id="stand-label">Stand up</span> <kbd>Esc</kbd></button>
     </div>
   </div>
   <div id="launcher" aria-label="Desktop shortcuts">
