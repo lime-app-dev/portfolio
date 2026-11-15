@@ -599,11 +599,72 @@ for (let index = 0; index < 5; index += 1) {
   box('#19191d', [0.08, 0.09, 0.075], [0, 0.05, 0.3], leg, 0.028);
 }
 
-const computerBody = box('#b8b9ba', [0.225, 0.055, 0.225], [1.11, 0.954, -2.56], scene, 0.025);
-computerBody.material.metalness = 0.53;
-computerBody.material.roughness = 0.33;
-box('#25252a', [0.205, 0.014, 0.205], [1.11, 0.931, -2.56], scene, 0.007);
-box('#ece5d6', [0.007, 0.005, 0.002], [1.182, 0.955, -2.446], scene, 0.001);
+const macMini = new THREE.Group();
+macMini.position.set(1.11, 0.923, -2.56);
+scene.add(macMini);
+
+const enclosure = new THREE.Shape();
+enclosure.moveTo(-0.087, -0.112);
+enclosure.lineTo(0.087, -0.112);
+enclosure.quadraticCurveTo(0.112, -0.112, 0.112, -0.087);
+enclosure.lineTo(0.112, 0.087);
+enclosure.quadraticCurveTo(0.112, 0.112, 0.087, 0.112);
+enclosure.lineTo(-0.087, 0.112);
+enclosure.quadraticCurveTo(-0.112, 0.112, -0.112, 0.087);
+enclosure.lineTo(-0.112, -0.087);
+enclosure.quadraticCurveTo(-0.112, -0.112, -0.087, -0.112);
+const computerBody = new THREE.Mesh(
+  new THREE.ExtrudeGeometry(enclosure, {
+    depth: 0.039, bevelThickness: 0.0012, bevelSize: 0.0012, bevelSegments: 2, curveSegments: 12
+  }),
+  new THREE.MeshStandardMaterial({ color: '#c9cbd0', metalness: 0.46, roughness: 0.29 })
+);
+computerBody.rotation.x = -Math.PI / 2;
+computerBody.position.y = 0.007;
+computerBody.castShadow = true;
+computerBody.receiveShadow = true;
+macMini.add(computerBody);
+
+const foot = new THREE.Mesh(
+  new THREE.CylinderGeometry(0.092, 0.09, 0.008, 48),
+  new THREE.MeshStandardMaterial({ color: '#222327', roughness: 0.66 })
+);
+foot.position.y = 0.004;
+macMini.add(foot);
+
+const markCanvas = document.createElement('canvas');
+markCanvas.width = markCanvas.height = 128;
+const mark = markCanvas.getContext('2d');
+mark.fillStyle = '#15161a';
+mark.beginPath();
+mark.moveTo(64, 39);
+mark.bezierCurveTo(47, 34, 35, 31, 24, 44);
+mark.bezierCurveTo(8, 62, 22, 101, 42, 113);
+mark.bezierCurveTo(49, 117, 56, 109, 65, 109);
+mark.bezierCurveTo(73, 109, 82, 117, 89, 111);
+mark.bezierCurveTo(98, 104, 105, 93, 109, 83);
+mark.bezierCurveTo(88, 75, 87, 52, 104, 44);
+mark.bezierCurveTo(93, 31, 79, 34, 64, 39);
+mark.fill();
+mark.beginPath();
+mark.moveTo(64, 33);
+mark.bezierCurveTo(63, 19, 76, 8, 91, 7);
+mark.bezierCurveTo(90, 23, 79, 33, 64, 33);
+mark.fill();
+const macMark = new THREE.Mesh(
+  new THREE.PlaneGeometry(0.052, 0.052),
+  new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(markCanvas), transparent: true, depthWrite: false })
+);
+macMark.rotation.x = -Math.PI / 2;
+macMark.position.y = 0.0474;
+macMini.add(macMark);
+
+const statusLight = new THREE.Mesh(
+  new THREE.CircleGeometry(0.00125, 12),
+  new THREE.MeshBasicMaterial({ color: '#fffaed' })
+);
+statusLight.position.set(0.072, 0.017, 0.113);
+macMini.add(statusLight);
 
 const airPods = new THREE.Group();
 airPods.position.set(-0.87, 0.94, -2.41);
