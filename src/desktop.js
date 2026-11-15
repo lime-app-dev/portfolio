@@ -62,7 +62,7 @@ export function openFolder(folder, returnFrom) {
   toolbar.hidden = backButton.hidden && shareButton.hidden;
   for (const panel of panels) panel.hidden = panel !== selected;
   const heading = selected.querySelector('h2');
-  title.textContent = heading.textContent;
+  title.textContent = selected.dataset.windowTitle ?? heading.textContent;
   const focusTarget = returnFrom ? selected.querySelector(`[data-open-folder="${returnFrom}"]`) ?? heading : heading;
   focusTarget.focus({ preventScroll: true });
 }

@@ -346,3 +346,31 @@ body:has(#computer:not([hidden])) #sound-room{visibility:hidden}
 .portfolio-role{margin:.5rem 0 0;font-size:clamp(.75rem,2.5vw,1rem);color:#faf4e5}
 #open-computer{position:relative}
 .monitor-label{position:absolute;top:100%;right:0;white-space:nowrap;font:600 .65rem system-ui;text-shadow:0 1px 5px #000,0 0 8px #000}
+
+.contact-content{background:#fbfaff;color:#242035}
+.contact-banner{
+  min-height:clamp(80px,15vw,124px);
+  background:linear-gradient(105deg,#221a3ba0,#36285130),url('/abstract-desktop.jpg') center 54% / cover;
+}
+.contact-profile{padding:0 clamp(18px,5vw,38px) clamp(22px,5vw,36px)}
+.contact-icon,.contact-avatar{
+  display:grid;place-items:center;color:#fdfaff;background:linear-gradient(145deg,#7564a1,#3b2e60);
+  font-weight:700;text-shadow:none;
+}
+.contact-icon{width:41px;height:41px;border:1px solid #ffffff55;border-radius:12px;box-shadow:0 3px 10px #16112260}
+.contact-avatar{
+  position:relative;width:64px;height:64px;margin-top:-32px;border:3px solid #fbfaff;
+  border-radius:18px;font-size:1.2rem;box-shadow:0 4px 12px #251b4326;
+}
+.contact-profile h2{margin:10px 0 4px;font:700 clamp(1.45rem,5vw,2.1rem)/1.15 system-ui;letter-spacing:-.04em}
+.contact-profile h2:focus{outline:none}
+.contact-profile p{margin:0;color:#514960;font-size:.9rem;line-height:1.55}
+.contact-link{
+  display:flex;align-items:center;gap:10px;width:fit-content;max-width:100%;min-height:44px;margin-top:22px;
+  padding:8px 12px;border:1px solid #ded7ee;border-radius:9px;
+  background:#f0ecf8;color:#362950;text-decoration:none;font-size:.85rem;font-weight:650;
+}
+.contact-link:hover{background:#e8e0f5}
+.contact-link:focus-visible{outline:2px solid #635389;outline-offset:3px}
+.contact-link-mark{display:grid;place-items:center;width:22px;height:22px;border-radius:4px;background:#0a66c2;color:#fff}
+.contact-link-arrow{margin-inline-start:6px}

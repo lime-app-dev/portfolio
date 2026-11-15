@@ -39,7 +39,7 @@
     <button id="open-experience" class="desktop-shortcut" data-open-folder="experience" type="button"><span class="folder" aria-hidden="true"></span>Work experience</button>
     <button id="open-projects" class="desktop-shortcut" data-open-folder="projects" type="button"><span class="folder" aria-hidden="true"></span>Projects</button>
     <a class="desktop-shortcut" href="https://www.linkedin.com/in/bernardine-richards-2ba6a544b/" target="_blank" rel="noopener noreferrer"><span class="browser-icon" aria-hidden="true"></span>LinkedIn</a>
-    <button id="open-contact" class="desktop-shortcut" data-open-folder="contact" type="button"><span class="folder" aria-hidden="true"></span>Contact</button>
+    <button id="open-contact" class="desktop-shortcut" data-open-folder="contact" type="button"><span class="contact-icon" aria-hidden="true">BR</span>Contact</button>
   </div>
 
   <section id="desktop-window" class="mac-window" aria-labelledby="window-title" hidden>
@@ -58,9 +58,18 @@
       <button id="copy-window-link" type="button" hidden>Copy link</button>
     </div>
     <input id="share-url" aria-label="Link to this window" readonly hidden>
-    <div class="window-content folder-content" data-folder="contact" hidden>
-      <h2 tabindex="-1">Contact</h2>
-      <a class="project-source" href="https://www.linkedin.com/in/bernardine-richards-2ba6a544b/" target="_blank" rel="noopener noreferrer">Connect on LinkedIn <span aria-hidden="true">↗</span></a>
+    <div class="window-content contact-content" data-folder="contact" data-window-title="Contact" hidden>
+      <div class="contact-banner"></div>
+      <div class="contact-profile">
+        <span class="contact-avatar" aria-hidden="true">BR</span>
+        <h2 tabindex="-1">Bernardine Richards</h2>
+        <p>Senior Frontend Developer · Shopify themes and apps</p>
+        <a class="contact-link" href="https://www.linkedin.com/in/bernardine-richards-2ba6a544b/" target="_blank" rel="noopener noreferrer">
+          <span class="contact-link-mark" aria-hidden="true">in</span>
+          <span>Connect on LinkedIn</span>
+          <span class="contact-link-arrow" aria-hidden="true">↗</span>
+        </a>
+      </div>
     </div>
     <div class="window-content folder-content" data-folder="projects" hidden>
       <h2 tabindex="-1">Projects</h2>
