@@ -16,12 +16,14 @@ kbd{margin-left:.35em;font:inherit;opacity:.68}
 #aim{left:50%;top:50%;transform:translate(-50%,-50%);pointer-events:none;text-shadow:0 0 6px #000}
 #controls{
   bottom:clamp(18px,4vh,38px);left:clamp(16px,4vw,48px);right:clamp(16px,4vw,48px);
-  display:grid;grid-template-columns:1fr auto 1fr;grid-template-areas:"movement hint .";
+  display:grid;grid-template-columns:1fr auto 1fr;grid-template-areas:"movement hint shortcut";
   align-items:end;text-align:center;pointer-events:none;
 }
 #controls button{pointer-events:auto}
 #hint{grid-area:hint;margin:0;padding:.5rem .8rem;border-radius:20px;background:#20271dc9;font: .78rem ui-monospace,monospace}
-.cabin-actions{grid-area:hint;justify-self:center}
+.cabin-actions{display:contents}
+#sit{grid-area:hint;justify-self:center}
+#open-computer{grid-area:shortcut;justify-self:end}
 #instruction{grid-area:movement;justify-self:start}
 .movement-keys{display:grid;grid-template-columns:repeat(3,42px);gap:5px}
 .movement-keys>span{
@@ -160,7 +162,6 @@ kbd{margin-left:.35em;font:inherit;opacity:.68}
 }
 .sound-toggle:hover,.icon-button:hover{background:#fff2;outline:none}
 .sound-toggle:focus-visible,.icon-button:focus-visible{outline:2px solid #d8cbf1;outline-offset:1px}
-#open-computer{display:none}
 .monitor-icon{width:34px;height:34px;background:currentColor;mask:url('/icons/device-desktop.svg') center / contain no-repeat}
 .sound-toggle[aria-pressed="true"]{color:#e6d1ff}
 .sound-icon{width:24px;height:24px;background:currentColor;mask:url('/icons/volume.svg') center / contain no-repeat}
@@ -272,7 +273,6 @@ body:has(#computer:not([hidden])) #sound-room{visibility:hidden}
     border:1px solid #fff8;box-shadow:0 2px 6px #0004;pointer-events:none;
   }
   #joystick.is-held .joystick-thumb{background:#f7efdcc7}
-  #open-computer{display:grid}
   #sit{min-height:44px}
   #sit:not([hidden]) + #open-computer,#hint,#instruction,#controls kbd,#stand kbd{display:none}
   #music-credit{bottom:calc(3px + env(safe-area-inset-bottom));left:max(8px,env(safe-area-inset-left))}

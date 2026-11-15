@@ -3,6 +3,7 @@ import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.j
 import './style.css';
 import { playChair, playFootstep } from './audio.js';
 import { resetDesktop } from './desktop.js';
+import { drawCodexDisplay } from './codex-display.js';
 
 const sceneElement = document.querySelector('#scene');
 const hint = document.querySelector('#hint');
@@ -432,16 +433,10 @@ function display(x, angle, secondary) {
     ctx.fillStyle = '#182c33';
     ctx.fillRect(0, 0, 720, 412);
     if (wallpaper.complete && wallpaper.naturalWidth) {
-      ctx.save();
-      if (secondary) {
-        ctx.translate(720, 0);
-        ctx.scale(-1, 1);
-      }
       const scale = Math.max(720 / wallpaper.naturalWidth, 412 / wallpaper.naturalHeight);
       const width = wallpaper.naturalWidth * scale;
       const height = wallpaper.naturalHeight * scale;
       ctx.drawImage(wallpaper, (720 - width) / 2, (412 - height) / 2, width, height);
-      ctx.restore();
     }
     ctx.fillStyle = '#20232acc';
     ctx.fillRect(0, 0, 720, 23);
@@ -449,35 +444,33 @@ function display(x, angle, secondary) {
     ctx.font = '12px system-ui';
     ctx.fillText('Finder    File    Edit    View    Go    Window    Help', 16, 15);
     ctx.fillText('10:42 AM', 652, 15);
-    if (!secondary) {
-      for (const [label, y] of [['Projects', 52], ['Work experience', 120]]) {
-        ctx.fillStyle = '#91cbff';
-        ctx.beginPath();
-        ctx.roundRect(35, y - 4, 16, 10, 3);
-        ctx.fill();
-        ctx.beginPath();
-        ctx.roundRect(34, y, 38, 26, 5);
-        ctx.fill();
-        ctx.fillStyle = '#fff';
-        ctx.textAlign = 'center';
-        ctx.fillText(label, 53, y + 43);
-      }
-      ctx.fillStyle = '#bde8ff';
+    for (const [label, y] of [['Projects', 52], ['Work experience', 120]]) {
+      ctx.fillStyle = '#91cbff';
       ctx.beginPath();
-      ctx.arc(53, 195, 12, 0, Math.PI * 2);
+      ctx.roundRect(35, y - 4, 16, 10, 3);
       ctx.fill();
-      ctx.fillStyle = '#3f6591';
       ctx.beginPath();
-      ctx.moveTo(60, 188);
-      ctx.lineTo(55, 198);
-      ctx.lineTo(47, 203);
-      ctx.lineTo(51, 194);
-      ctx.closePath();
+      ctx.roundRect(34, y, 38, 26, 5);
       ctx.fill();
       ctx.fillStyle = '#fff';
-      ctx.fillText('LinkedIn', 53, 221);
-      ctx.textAlign = 'start';
+      ctx.textAlign = 'center';
+      ctx.fillText(label, 53, y + 43);
     }
+    ctx.fillStyle = '#bde8ff';
+    ctx.beginPath();
+    ctx.arc(53, 195, 12, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#3f6591';
+    ctx.beginPath();
+    ctx.moveTo(60, 188);
+    ctx.lineTo(55, 198);
+    ctx.lineTo(47, 203);
+    ctx.lineTo(51, 194);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = '#fff';
+    ctx.fillText('LinkedIn', 53, 221);
+    ctx.textAlign = 'start';
     ctx.fillStyle = '#27262ba8';
     ctx.beginPath();
     ctx.roundRect(259, 365, 202, 39, 10);
@@ -490,19 +483,30 @@ function display(x, angle, secondary) {
     });
     texture.needsUpdate = true;
   }
-  wallpaper.addEventListener('load', drawDesktop);
-  wallpaper.src = import.meta.env.BASE_URL + 'abstract-desktop.jpg';
-  drawDesktop();
+  if (secondary) {
+    drawCodexDisplay(ctx);
+  } else {
+    wallpaper.addEventListener('load', drawDesktop);
+    wallpaper.src = import.meta.env.BASE_URL + 'abstract-desktop.jpg';
+    drawDesktop();
+  }
   const screen = new THREE.Mesh(new THREE.PlaneGeometry(0.889, 0.503), new THREE.MeshBasicMaterial({ map: texture, toneMapped: false }));
   screen.position.z = 0.024;
   monitor.add(screen);
   const glow = new THREE.PointLight(secondary ? '#8069ff' : '#d276ff', 5, 2.4);
   glow.position.set(x, 1.34, -3.29);
   scene.add(glow);
+
+  if (secondary) {
+    return (elapsed, reduced) => {
+      drawCodexDisplay(ctx, elapsed, reduced);
+      texture.needsUpdate = true;
+    };
+  }
 }
 const mainDisplay = { x: -0.47, y: 1.38, z: -2.86, angle: 0.13 };
 display(mainDisplay.x, mainDisplay.angle, false);
-display(0.5, -0.31, true);
+const updateSecondaryDisplay = display(0.5, -0.31, true);
 
 box('#1b1b20', [0.63, 0.037, 0.215], [-0.42, 0.95, -2.4], scene, 0.015);
 for (let row = 0; row < 4; row += 1) {
@@ -845,6 +849,9 @@ function move(dt) {
 }
 
 let lastFrame = performance.now();
+let codeElapsed = 0;
+let nextCodeFrame = 0;
+let codeReduced = false;
 renderer.setAnimationLoop(now => {
   const dt = Math.min(Math.max(0, now - lastFrame) / 1000, 0.05);
   lastFrame = now;
@@ -868,6 +875,12 @@ renderer.setAnimationLoop(now => {
       transition = null;
     }
   }
+  if (reduceMotion.matches !== codeReduced || (!reduceMotion.matches && codeElapsed >= nextCodeFrame)) {
+    codeReduced = reduceMotion.matches;
+    updateSecondaryDisplay(codeElapsed, codeReduced);
+    nextCodeFrame = codeElapsed + 110;
+  }
+  if (!reduceMotion.matches) codeElapsed += dt * 1000;
   for (let index = 0; index < streakCount; index += 1) {
     if (heights[index] < 0.12) heights[index] += 3.3;
     if (!reduceMotion.matches) heights[index] -= dt * (1.4 + index % 7 * 0.11);
