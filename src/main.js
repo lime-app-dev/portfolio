@@ -593,7 +593,11 @@ const openProjects = document.querySelector('#open-projects');
 const stand = document.querySelector('#stand');
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
 const touchLayout = matchMedia('(pointer: coarse), (max-width: 640px)');
-const movementPointers = new Map();
+const joystick = document.querySelector('#joystick');
+const thumb = joystick.firstElementChild;
+let joystickPointer;
+let joystickX = 0;
+let joystickY = 0;
 const keys = new Set();
 const doorway = new THREE.Vector3(0.27, 1.64, 2.91);
 const seated = new THREE.Vector3(deskCenter, 1.42, -1.57);
@@ -662,7 +666,7 @@ function sitDown() {
 function enterComputer(nextMode) {
   mode = nextMode;
   keys.clear();
-  movementPointers.clear();
+  resetJoystick();
   drag = undefined;
   controls.hidden = true;
   aim.hidden = true;
@@ -710,18 +714,41 @@ window.addEventListener('keydown', event => {
 window.addEventListener('keyup', event => keys.delete(event.key.toLowerCase()));
 window.addEventListener('blur', () => {
   keys.clear();
-  movementPointers.clear();
+  resetJoystick();
   drag = undefined;
 });
-for (const button of document.querySelectorAll('[data-move]')) {
-  const key = button.dataset.move.toLowerCase();
-  button.addEventListener('pointerdown', event => {
-    if (mode !== 'walking' || event.button !== 0) return;
-    button.setPointerCapture(event.pointerId);
-    movementPointers.set(event.pointerId, key);
-  });
-  button.addEventListener('lostpointercapture', event => movementPointers.delete(event.pointerId));
+function resetJoystick() {
+  joystickPointer = undefined;
+  joystickX = 0;
+  joystickY = 0;
+  thumb.style.transform = '';
+  joystick.classList.remove('is-held');
 }
+
+function updateJoystick(event) {
+  const bounds = joystick.getBoundingClientRect();
+  const travel = (bounds.width - thumb.offsetWidth) / 2 - 5;
+  const x = event.clientX - (bounds.left + bounds.width / 2);
+  const y = event.clientY - (bounds.top + bounds.height / 2);
+  const scale = Math.max(travel, Math.hypot(x, y));
+  joystickX = x / scale;
+  joystickY = y / scale;
+  thumb.style.transform = `translate(${joystickX * travel}px, ${joystickY * travel}px)`;
+}
+
+joystick.addEventListener('pointerdown', event => {
+  if (mode !== 'walking' || joystickPointer !== undefined || event.button !== 0) return;
+  joystickPointer = event.pointerId;
+  joystick.setPointerCapture(event.pointerId);
+  joystick.classList.add('is-held');
+  updateJoystick(event);
+});
+joystick.addEventListener('pointermove', event => {
+  if (event.pointerId === joystickPointer) updateJoystick(event);
+});
+joystick.addEventListener('lostpointercapture', event => {
+  if (event.pointerId === joystickPointer) resetJoystick();
+});
 
 const ray = new THREE.Raycaster();
 renderer.domElement.addEventListener('pointerdown', event => {
@@ -780,11 +807,13 @@ function walkable(x, z) {
     && obstacles.every(([left, right, back, front]) => x < left || x > right || z < back || z > front);
 }
 function move(dt) {
-  const pressed = new Set([...keys, ...movementPointers.values()]);
-  const forward = Number(pressed.has('w') || pressed.has('arrowup')) - Number(pressed.has('s') || pressed.has('arrowdown'));
-  const side = Number(pressed.has('d') || pressed.has('arrowright')) - Number(pressed.has('a') || pressed.has('arrowleft'));
+  const stickActive = Math.hypot(joystickX, joystickY) > 0.14;
+  const forward = Number(keys.has('w') || keys.has('arrowup')) - Number(keys.has('s') || keys.has('arrowdown'))
+    - (stickActive ? joystickY : 0);
+  const side = Number(keys.has('d') || keys.has('arrowright')) - Number(keys.has('a') || keys.has('arrowleft'))
+    + (stickActive ? joystickX : 0);
   if (!forward && !side) return;
-  const distance = 2.25 * dt / (Math.hypot(forward, side) || 1);
+  const distance = 2.25 * dt / Math.max(1, Math.hypot(forward, side));
   const startX = camera.position.x;
   const startZ = camera.position.z;
   const x = startX + (side * Math.cos(yaw) - forward * Math.sin(yaw)) * distance;

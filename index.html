@@ -9,16 +9,13 @@
 <footer id="controls">
   <p id="hint" aria-live="polite">Walk toward the desk</p>
   <div class="cabin-actions">
-    <div id="directions" role="group" aria-label="Movement controls">
-      <button data-move="ArrowUp" aria-label="Move forward" type="button">↑</button>
-      <button data-move="ArrowLeft" aria-label="Move left" type="button">←</button>
-      <button data-move="ArrowDown" aria-label="Move backward" type="button">↓</button>
-      <button data-move="ArrowRight" aria-label="Move right" type="button">→</button>
+    <div id="joystick" role="group" aria-label="Movement joystick">
+      <span class="joystick-thumb" aria-hidden="true"></span>
     </div>
     <button id="sit" type="button" hidden>Sit down <kbd>E</kbd></button>
     <button id="open-computer" type="button">Open computer</button>
   </div>
-  <small id="instruction"><span class="keyboard-help">WASD or arrows to move · Drag to look</span><span class="touch-help">Hold an arrow to move · Swipe to look</span></small>
+  <small id="instruction">WASD or arrows to move · Drag to look</small>
 </footer>
 <section id="computer" aria-label="Studio computer" hidden>
   <div class="bar">
