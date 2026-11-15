@@ -273,10 +273,9 @@ body:has(#computer:not([hidden])) #sound-room{visibility:hidden}
     top:calc(60px + env(safe-area-inset-top));left:env(safe-area-inset-left);
     right:env(safe-area-inset-right);bottom:env(safe-area-inset-bottom);border-radius:0;
   }
-  .window-titlebar{min-height:44px;padding:0 12px 0 132px}
+  .window-titlebar{min-height:44px;padding:0 88px}
   .window-titlebar>span{max-width:100%;overflow:hidden;text-overflow:ellipsis}
-  @media (min-width: 370px){.window-titlebar{padding-inline:126px}}
   .traffic-lights{left:3px;gap:0}
-  .traffic-lights button{width:42px;height:44px}
+  .traffic-lights button{width:27px;height:44px}
   .folder-back{min-height:44px}
 }
