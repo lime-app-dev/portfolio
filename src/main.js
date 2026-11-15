@@ -72,12 +72,39 @@ for (let index = 0; index < 25; index += 1) {
   wood(index % 3 === 0 ? '#e3cbb5' : '#fff0df', [0.277, 0.10, 7], [x, -0.055, 0]);
 }
 
-const wallConcrete = '#626262';
-box(wallConcrete, [7, 3.3, 0.12], [0, 1.65, 3.5]);
-for (const x of [-3.5, 3.5]) {
-  box(wallConcrete, [0.12, 3.3, 7], [x, 1.65, 0]);
+const wallpaperCanvas = document.createElement('canvas');
+wallpaperCanvas.width = wallpaperCanvas.height = 128;
+const wallpaperContext = wallpaperCanvas.getContext('2d');
+wallpaperContext.fillStyle = '#36343b';
+wallpaperContext.fillRect(0, 0, 128, 128);
+wallpaperContext.strokeStyle = '#424047';
+wallpaperContext.lineWidth = 1.5;
+
+// Staggered arches continue across the tile edges.
+for (let row = -1; row <= 2; row += 1) {
+  for (let column = -1; column <= 1; column += 1) {
+    const x = column * 128 + (row % 2 ? 64 : 0);
+    const y = row * 64;
+    wallpaperContext.beginPath();
+    wallpaperContext.moveTo(x - 64, y);
+    wallpaperContext.quadraticCurveTo(x, y - 86, x + 64, y);
+    wallpaperContext.stroke();
+  }
 }
-box(wallConcrete, [7, 0.12, 7], [0, 3.35, 0]);
+const wallWallpaper = new THREE.CanvasTexture(wallpaperCanvas);
+wallWallpaper.colorSpace = THREE.SRGBColorSpace;
+wallWallpaper.wrapS = wallWallpaper.wrapT = THREE.RepeatWrapping;
+wallWallpaper.repeat.set(14, 7);
+wallWallpaper.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
+
+const walls = [box('#ffffff', [7, 3.3, 0.12], [0, 1.65, 3.5])];
+for (const x of [-3.5, 3.5]) {
+  walls.push(box('#ffffff', [0.12, 3.3, 7], [x, 1.65, 0]));
+}
+for (const wall of walls) {
+  wall.material.map = wallWallpaper;
+}
+box('#626262', [7, 0.12, 7], [0, 3.35, 0]);
 
 const entry = wood('#c1a58d', [0.98, 2.22, 0.082], [0.27, 1.11, 3.405]);
 entry.material.roughness = 0.67;
