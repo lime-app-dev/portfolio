@@ -5,6 +5,7 @@ import { playChair, playCoffeeBrew, playFootstep } from './audio.js';
 import { resetDesktop } from './desktop.js';
 import { drawCodeEditor } from './code-editor-display.js';
 import { createCoffeeStation, createMug } from './coffee.js';
+import { addKitchenAppliances, createFridge } from './kitchen-appliances.js';
 
 const sceneElement = document.querySelector('#scene');
 const hint = document.querySelector('#hint');
@@ -395,6 +396,8 @@ throwMesh.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(h
 couch.add(throwMesh);
 
 const coffeeStation = createCoffeeStation(scene, box, textureLoader);
+addKitchenAppliances(scene, box);
+const fridge = createFridge(scene, box);
 
 const workstationStart = scene.children.length;
 const desk = '#222224';
@@ -599,6 +602,8 @@ for (const object of scene.children.slice(workstationStart)) object.position.x +
 
 const controls = document.querySelector('#controls');
 const sit = document.querySelector('#sit');
+const fridgeButton = document.querySelector('#fridge-door');
+const fridgeLabel = document.querySelector('#fridge-label');
 const brewButton = document.querySelector('#brew-coffee');
 const brewLabel = document.querySelector('#brew-label');
 const coffeeStatus = document.querySelector('#coffee-status');
@@ -663,13 +668,25 @@ function nearChair() {
   return Math.hypot(camera.position.x - deskCenter, camera.position.z + 1.54) < 1.12;
 }
 
-function nearCoffee() {
-  const { x, z } = coffeeStation.station.position;
-  return Math.hypot(camera.position.x - x, camera.position.z - z) < 1.5;
+function kitchenDistance(object) {
+  return Math.hypot(camera.position.x - object.position.x, camera.position.z - object.position.z);
+}
+
+function kitchenInteraction() {
+  const coffeeDistance = kitchenDistance(coffeeStation.station);
+  const fridgeDistance = kitchenDistance(fridge.fridge);
+  if (fridgeDistance < 1.35 && fridgeDistance < coffeeDistance) return 'fridge';
+  if (coffeeDistance < 1.5) return 'coffee';
+}
+
+function toggleFridge() {
+  if (mode !== 'walking' || kitchenDistance(fridge.fridge) >= 1.35) return;
+  fridge.toggle();
+  fridgeLabel.textContent = fridge.open ? 'Close fridge' : 'Open fridge';
 }
 
 function brewCoffee() {
-  if (mode !== 'walking' || !nearCoffee() || coffeeStation.brewing) return;
+  if (mode !== 'walking' || kitchenDistance(coffeeStation.station) >= 1.5 || coffeeStation.brewing) return;
   coffeeStation.start(performance.now());
   playCoffeeBrew();
 }
@@ -725,6 +742,7 @@ function standUp() {
 
 sit.addEventListener('click', sitDown);
 brewButton.addEventListener('click', brewCoffee);
+fridgeButton.addEventListener('click', toggleFridge);
 openComputer.addEventListener('click', () => {
   if (mode !== 'walking') return;
   enterComputer('browsing');
@@ -746,7 +764,9 @@ window.addEventListener('keydown', event => {
   const key = event.key.toLowerCase();
   if (key === 'escape') standUp();
   if (key === 'e' && !event.repeat) {
-    if (nearCoffee()) brewCoffee();
+    const action = kitchenInteraction();
+    if (action === 'fridge') toggleFridge();
+    else if (action === 'coffee') brewCoffee();
     else sitDown();
   }
   if (mode === 'walking' && movementKeys.includes(key)) {
@@ -821,7 +841,8 @@ renderer.domElement.addEventListener('pointerup', event => {
       x: (event.clientX - bounds.left) / bounds.width * 2 - 1,
       y: 1 - (event.clientY - bounds.top) / bounds.height * 2
     }, camera);
-    if (nearCoffee() && ray.intersectObject(coffeeStation.station, true).length) brewCoffee();
+    if (kitchenDistance(fridge.fridge) < 1.35 && ray.intersectObject(fridge.fridge, true).length) toggleFridge();
+    else if (kitchenDistance(coffeeStation.station) < 1.5 && ray.intersectObject(coffeeStation.station, true).length) brewCoffee();
     else if (nearChair() && ray.intersectObject(chair, true).length) sitDown();
   }
   drag = undefined;
@@ -850,7 +871,8 @@ const obstacles = [
   [-3.54, -2.23, -2.4, 0.48],
   [-3.24, -2.55, 2.36, 3.0],
   [1.08, 3.24, 2.49, 3.24],
-  [2.54, 3.24, 1.55, 2.65]
+  [2.54, 3.24, 1.55, 2.65],
+  [2.61, 3.24, 0.56, 1.54]
 ];
 function walkable(x, z) {
   return Math.abs(x) < 3.24 && Math.abs(z) < 3.24
@@ -888,10 +910,13 @@ renderer.setAnimationLoop(now => {
   lastFrame = now;
   if (mode === 'walking') {
     coffeeStation.update(now, reduceMotion.matches);
+    fridge.update(dt, reduceMotion.matches);
     move(dt);
     const chairNearby = nearChair();
     sit.hidden = !chairNearby;
-    const coffeeNearby = nearCoffee();
+    const action = kitchenInteraction();
+    const coffeeNearby = action === 'coffee';
+    fridgeButton.hidden = action !== 'fridge';
     brewButton.hidden = !coffeeNearby;
     const brewing = coffeeStation.brewing;
     const label = brewing ? 'Brewing…' : coffeeStation.finished ? 'Brew again' : 'Make coffee';
@@ -900,7 +925,7 @@ renderer.setAnimationLoop(now => {
     coffeeStatus.hidden = !coffeeNearby || !coffeeStation.finished;
     const status = coffeeStatus.hidden ? '' : 'Coffee ready';
     if (coffeeStatus.textContent !== status) coffeeStatus.textContent = status;
-    hint.hidden = chairNearby || coffeeNearby;
+    hint.hidden = chairNearby || Boolean(action);
   }
   if (!computer.hidden) return;
   if (transition) {

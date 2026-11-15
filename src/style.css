@@ -22,7 +22,7 @@ kbd{margin-left:.35em;font:inherit;opacity:.68}
 #controls button{pointer-events:auto}
 #hint{grid-area:hint;margin:0;padding:.5rem .8rem;border-radius:20px;background:#20271dc9;font: .78rem ui-monospace,monospace}
 .cabin-actions{display:contents}
-#sit,#brew-coffee{grid-area:hint;justify-self:center}
+#sit,#brew-coffee,#fridge-door{grid-area:hint;justify-self:center}
 #open-computer{grid-area:shortcut;justify-self:end}
 #instruction{grid-area:movement;justify-self:start}
 .movement-keys{display:grid;grid-template-columns:repeat(3,42px);gap:5px}
@@ -39,7 +39,7 @@ kbd{margin-left:.35em;font:inherit;opacity:.68}
 .movement-keys>span:not(.movement-forward){grid-row:2}
 .movement-keys>span:nth-child(2){grid-column:1;grid-row:2}
 .movement-keys kbd{margin:0;opacity:1;font:600 .73rem ui-monospace,monospace}
-#sit,#brew-coffee{background:#dac2f4;color:#291b37;border-color:transparent;border-radius:24px}
+#sit,#brew-coffee,#fridge-door{background:#dac2f4;color:#291b37;border-color:transparent;border-radius:24px}
 #brew-coffee:disabled{cursor:default;opacity:.86}
 #coffee-status{
   position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);margin:0;padding:6px 10px;
@@ -278,8 +278,8 @@ body:has(#computer:not([hidden])) #sound-room{visibility:hidden}
     border:1px solid #fff8;box-shadow:0 2px 6px #0004;pointer-events:none;
   }
   #joystick.is-held .joystick-thumb{background:#f7efdcc7}
-  #sit,#brew-coffee{min-height:44px}
-  #sit:not([hidden]) ~ #open-computer,#brew-coffee:not([hidden]) ~ #open-computer,#hint,#instruction,#controls kbd,#stand kbd{display:none}
+  #sit,#brew-coffee,#fridge-door{min-height:44px}
+  #sit:not([hidden]) ~ #open-computer,#brew-coffee:not([hidden]) ~ #open-computer,#fridge-door:not([hidden]) ~ #open-computer,#hint,#instruction,#controls kbd,#stand kbd{display:none}
   #music-credit{bottom:calc(3px + env(safe-area-inset-bottom));left:max(8px,env(safe-area-inset-left))}
   body:has(#music-credit:not([hidden])) #controls{bottom:calc(26px + env(safe-area-inset-bottom))}
   .bar{
