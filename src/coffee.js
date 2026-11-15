@@ -100,7 +100,17 @@ export function createCoffeeStation(scene, box, textureLoader) {
   scene.add(station);
   box('#23262a', [0.44, 0.41, 0.22], [0, 0.205, -0.102], station, 0.027);
   box('#33363a', [0.43, 0.105, 0.30], [0, 0.36, 0.022], station, 0.022);
-  box('#a3abac', [0.37, 0.055, 0.012], [0, 0.359, 0.175], station, 0.006);
+  const fascia = box('#b6bdbe', [0.42, 0.096, 0.014], [0, 0.359, 0.174], station, 0.018);
+  fascia.material.metalness = 0.38;
+  fascia.material.roughness = 0.28;
+  const glass = box('#171a1e', [0.411, 0.088, 0.012], [0, 0.359, 0.182], station, 0.015);
+  glass.material.roughness = 0.19;
+  box('#303941', [0.15, 0.056, 0.008], [-0.029, 0.36, 0.19], station, 0.006);
+  for (const x of [-0.068, 0.008]) {
+    for (const y of [0.347, 0.368]) box('#647674', [0.064, 0.014, 0.005], [x, y, 0.194], station, 0.003);
+  }
+  box('#39342f', [0.236, 0.046, 0.138], [0, 0.417, -0.063], station, 0.012);
+  box('#242527', [0.245, 0.013, 0.143], [0, 0.447, -0.063], station, 0.005);
   box('#4c5355', [0.44, 0.032, 0.31], [0, 0.017, 0.028], station, 0.009);
   for (let index = 0; index < 8; index += 1) {
     box('#a1a6a5', [0.31, 0.005, 0.008], [0, 0.035, 0.05 + index * 0.014], station);

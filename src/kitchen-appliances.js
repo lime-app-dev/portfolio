@@ -1,8 +1,25 @@
 import * as THREE from 'three';
 import { createMug } from './coffee.js';
 
+function brushedMetal(color, roughness) {
+  const canvas = document.createElement('canvas');
+  canvas.width = 128;
+  canvas.height = 256;
+  const ctx = canvas.getContext('2d');
+  for (let y = 0; y < canvas.height; y += 1) {
+    const noise = 218 + Math.round(18 * Math.sin(y * 17.6) + 8 * Math.cos(y * 3.83));
+    ctx.fillStyle = `rgb(${noise},${noise},${noise})`;
+    ctx.fillRect(0, y, canvas.width, 1);
+  }
+  const finish = new THREE.CanvasTexture(canvas);
+  finish.colorSpace = THREE.SRGBColorSpace;
+  return new THREE.MeshStandardMaterial({
+    color, map: finish, roughnessMap: finish, metalness: 0.26, roughness
+  });
+}
+
 export function addKitchenAppliances(scene, box) {
-  const steel = new THREE.MeshStandardMaterial({ color: '#a8afb0', metalness: 0.44, roughness: 0.36 });
+  const steel = brushedMetal('#d3d8dc', 0.44);
   const black = new THREE.MeshStandardMaterial({ color: '#26282a', roughness: 0.48 });
   function metalBox(size, position, parent, radius) {
     const mesh = box('#a8afb0', size, position, parent, radius);
@@ -14,18 +31,37 @@ export function addKitchenAppliances(scene, box) {
   const toaster = new THREE.Group();
   toaster.position.set(1.58, 0.946, 2.92);
   scene.add(toaster);
-  metalBox([0.27, 0.16, 0.16], [0, 0.091, 0], toaster, 0.032);
-  box('#282a2c', [0.25, 0.019, 0.148], [0, 0.012, 0], toaster, 0.008);
-  for (const z of [-0.029, 0.029]) box('#252525', [0.178, 0.006, 0.017], [0, 0.169, z], toaster, 0.004);
-  box('#303133', [0.04, 0.018, 0.023], [0.132, 0.104, -0.057], toaster, 0.005);
+  box('#242527', [0.282, 0.130, 0.17], [0, 0.080, 0], toaster, 0.029);
+  metalBox([0.224, 0.132, 0.174], [0, 0.086, 0], toaster, 0.016);
+  for (const x of [-0.126, 0.126]) {
+    box('#1b1c20', [0.041, 0.147, 0.178], [x, 0.092, 0], toaster, 0.018);
+    box('#151619', [0.037, 0.018, 0.151], [x, 0.011, 0], toaster, 0.006);
+  }
+  for (const z of [-0.029, 0.029]) {
+    box('#141517', [0.180, 0.005, 0.031], [0, 0.154, z], toaster, 0.006);
+    for (const edge of [-1, 1]) metalBox([0.174, 0.007, 0.006], [0, 0.158, z + edge * 0.017], toaster, 0.002);
+    for (const x of [-0.05, 0, 0.05]) metalBox([0.004, 0.004, 0.024], [x, 0.157, z], toaster, 0.001);
+  }
+  box('#111217', [0.006, 0.064, 0.016], [0.147, 0.103, -0.026], toaster, 0.004);
+  box('#38393c', [0.028, 0.013, 0.032], [0.156, 0.124, -0.026], toaster, 0.005);
+  const dial = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.018, 0.011, 24), black);
+  dial.rotation.z = Math.PI / 2;
+  dial.position.set(0.147, 0.048, 0.018);
+  toaster.add(dial);
 
   const kettle = new THREE.Group();
   kettle.position.set(2.79, 0.944, 3.03);
   scene.add(kettle);
-  const body = new THREE.Mesh(new THREE.CylinderGeometry(0.071, 0.091, 0.155, 32), steel);
-  body.position.y = 0.101;
+  const kettleProfile = [[0, 0.021], [0.074, 0.021], [0.091, 0.030], [0.094, 0.045], [0.091, 0.098],
+    [0.082, 0.158], [0.074, 0.183], [0.058, 0.188], [0, 0.188]];
+  const body = new THREE.Mesh(new THREE.LatheGeometry(kettleProfile.map(point => new THREE.Vector2(...point)), 40), black);
   body.castShadow = true;
   kettle.add(body);
+  const trim = new THREE.Mesh(new THREE.CylinderGeometry(0.093, 0.089, 0.02, 40), steel);
+  trim.position.y = 0.037;
+  kettle.add(trim);
+  const gauge = box('#3a464b', [0.018, 0.069, 0.01], [0.013, 0.105, -0.087], kettle, 0.004);
+  gauge.rotation.x = -0.13;
   const base = new THREE.Mesh(new THREE.CylinderGeometry(0.094, 0.095, 0.021, 32), black);
   base.position.y = 0.011;
   kettle.add(base);
@@ -37,7 +73,8 @@ export function addKitchenAppliances(scene, box) {
   handle.position.set(0.074, 0.107, 0);
   kettle.add(handle);
   const spout = new THREE.Mesh(new THREE.CylinderGeometry(0.019, 0.030, 0.086, 16), steel);
-  spout.position.set(-0.077, 0.132, 0);
+  spout.material = black;
+  spout.position.set(-0.077, 0.145, 0);
   spout.rotation.z = 0.94;
   kettle.add(spout);
 
@@ -48,7 +85,11 @@ export function addKitchenAppliances(scene, box) {
   for (let i = -2; i <= 2; i += 1) {
     metalBox([0.317, 0.010, 0.009], [0, 0.027, i * 0.041], rack, 0.003);
   }
-  for (const x of [-0.16, 0.16]) metalBox([0.012, 0.042, 0.21], [x, 0.032, 0], rack, 0.003);
+  for (const x of [-0.171, 0.171]) box('#292b2b', [0.014, 0.049, 0.221], [x, 0.036, 0], rack, 0.004);
+  for (const z of [-0.104, 0.104]) box('#292b2b', [0.354, 0.049, 0.014], [0, 0.036, z], rack, 0.004);
+  for (const x of [-0.108, -0.05, 0.01, 0.069, 0.128]) {
+    box('#333636', [0.006, 0.034, 0.08], [x, 0.046, 0.064], rack, 0.002);
+  }
   for (const [x, color] of [[-0.104, '#e6ded1'], [0.004, '#adcec0'], [0.113, '#d8c4b2']]) {
     const { mug, coffee } = createMug(color);
     coffee.visible = false;
@@ -76,7 +117,7 @@ export function createFridge(scene, box) {
   fridge.position.set(3.10, 0, 1.05);
   fridge.rotation.y = -Math.PI / 2;
   scene.add(fridge);
-  const shell = '#778183';
+  const shell = '#45494e';
   box(shell, [0.66, 1.72, 0.09], [0, 0.86, -0.233], fridge, 0.016);
   for (const x of [-0.308, 0.308]) box(shell, [0.049, 1.72, 0.53], [x, 0.86, 0.005], fridge, 0.013);
   for (const y of [0.051, 1.679]) box(shell, [0.615, 0.082, 0.53], [0, y, 0.005], fridge, 0.012);
@@ -99,11 +140,21 @@ export function createFridge(scene, box) {
   const hinge = new THREE.Group();
   hinge.position.set(-0.331, 0, 0.27);
   fridge.add(hinge);
-  const door = box('#929a9c', [0.662, 1.68, 0.066], [0.331, 0.854, 0.033], hinge, 0.027);
-  door.material.metalness = 0.36;
-  door.material.roughness = 0.43;
-  box('#d5dfdc', [0.601, 1.58, 0.026], [0.331, 0.855, -0.006], hinge, 0.018);
-  box('#3c4444', [0.026, 0.36, 0.041], [0.576, 1.12, 0.086], hinge, 0.01);
+  const graphite = brushedMetal('#62656b', 0.55);
+  function doorFace(size, position, parent) {
+    const panel = box('#62656b', size, position, parent, 0.016);
+    panel.material.dispose();
+    panel.material = graphite;
+  }
+  box('#26282d', [0.651, 0.023, 0.069], [0, 0.611, 0.295], fridge, 0.006);
+  doorFace([0.662, 0.567, 0.069], [0, 0.306, 0.304], fridge);
+  doorFace([0.662, 1.071, 0.068], [0.331, 1.173, 0.034], hinge);
+  box('#24262b', [0.64, 0.026, 0.061], [0.331, 0.641, 0.031], hinge, 0.005);
+  box('#d5dfdc', [0.601, 1.017, 0.026], [0.331, 1.169, -0.006], hinge, 0.013);
+  for (const y of [0.82, 1.18]) {
+    box('#aabdbb', [0.49, 0.059, 0.019], [0.331, y, -0.071], hinge, 0.007);
+    box('#d6dfdd', [0.49, 0.016, 0.052], [0.331, y - 0.033, -0.046], hinge, 0.005);
+  }
 
   let open = false;
   const targetAngle = -Math.PI * 0.56;

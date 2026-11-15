@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import './style.css';
-import { playChair, playCoffeeBrew, playFootstep } from './audio.js';
+import { playChair, playCoffeeBrew, playFootstep, playFridgeDoor } from './audio.js';
 import { resetDesktop } from './desktop.js';
 import { drawCodeEditor } from './code-editor-display.js';
 import { createCoffeeStation, createMug } from './coffee.js';
@@ -682,6 +682,7 @@ function kitchenInteraction() {
 function toggleFridge() {
   if (mode !== 'walking' || kitchenDistance(fridge.fridge) >= 1.35) return;
   fridge.toggle();
+  playFridgeDoor(fridge.open);
   fridgeLabel.textContent = fridge.open ? 'Close fridge' : 'Open fridge';
 }
 
