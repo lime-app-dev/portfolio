@@ -267,7 +267,10 @@ body:has(#computer:not([hidden])) #sound-room{visibility:hidden}
     right:max(12px,env(safe-area-inset-right));
   }
   .cabin-actions{display:flex;justify-self:stretch;align-items:end;justify-content:space-between;gap:8px}
-  #hint{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);white-space:nowrap}
+  #hint,#sit{
+    position:absolute;bottom:calc(100% + 24px);left:50%;
+    transform:translate(-50%,50%);white-space:nowrap;
+  }
   #joystick{
     display:grid;place-items:center;width:78px;height:78px;
     border:1px solid #f7efdc58;border-radius:50%;background:#20272080;
