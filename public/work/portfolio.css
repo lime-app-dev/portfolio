@@ -1,0 +1,17 @@
+:root{color-scheme:light;background:#f8f7fc;color:#252034;font:16px/1.65 system-ui,sans-serif}
+*{box-sizing:border-box}
+body{margin:0}
+main{max-width:740px;margin:auto;padding:clamp(20px,6vw,58px) clamp(16px,5vw,38px)}
+header{padding:clamp(20px,5vw,40px);background:#eee9f7;border:1px solid #ded5ee;border-radius:16px}
+h1,h2,h3{line-height:1.2;letter-spacing:-.025em}
+h1{font:500 clamp(2.2rem,7vw,3.9rem)/1.08 Georgia,serif;margin:.45em 0 .2em}
+h2{font-size:1.65rem;margin:0 0 1rem}
+h3{font-size:1.12rem;margin:0 0 .4rem}
+p{margin:0 0 12px}
+a{color:#4c3479;text-underline-offset:3px}
+a:focus-visible{outline:2px solid #60458c;outline-offset:4px}
+.role,.studio-link{font-weight:650}
+nav,.links{display:flex;flex-wrap:wrap;gap:6px 18px}
+section{padding:26px 0;border-bottom:1px solid #ded5ee}
+article+article{margin-top:22px}
+.dates{color:#584f67;font-size:.9rem}

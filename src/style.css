@@ -374,3 +374,8 @@ body:has(#computer:not([hidden])) #sound-room{visibility:hidden}
 .contact-link:focus-visible{outline:2px solid #635389;outline-offset:3px}
 .contact-link-mark{display:grid;place-items:center;width:22px;height:22px;border-radius:4px;background:#0a66c2;color:#fff}
 .contact-link-arrow{margin-inline-start:6px}
+.portfolio-text-link{
+  display:inline-flex;align-items:center;min-height:32px;color:#fff5de;
+  font-size:.76rem;font-weight:600;text-underline-offset:3px;
+}
+.portfolio-text-link:focus-visible{outline:2px solid #d4e8a6;outline-offset:3px}
