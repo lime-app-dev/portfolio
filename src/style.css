@@ -18,7 +18,7 @@ kbd{margin-left:.35em;font:inherit;opacity:.68}
 #controls button{pointer-events:auto}
 #hint,#instruction{display:table;margin:.5rem auto;background:#20271de6;border-radius:6px;padding:.45rem .75rem}
 #sit{background:#dac2f4;color:#291b37}
-#joystick,#open-computer{display:none}
+#joystick{display:none}
 #computer{inset:0;display:flex;flex-direction:column;overflow:hidden;background:#282034;z-index:2;transform-origin:top left;font-family:-apple-system,BlinkMacSystemFont,"DM Sans",system-ui,sans-serif}
 .bar{display:flex;justify-content:space-between;align-items:center;gap:.5rem;background:#1c1626;padding:8px 16px;font:600 .82rem -apple-system,BlinkMacSystemFont,system-ui,sans-serif}
 
@@ -133,7 +133,9 @@ kbd{margin-left:.35em;font:inherit;opacity:.68}
 
 #sound-room{position:fixed;right:max(clamp(16px,4vw,48px),env(safe-area-inset-right));top:max(clamp(18px,4vw,40px),env(safe-area-inset-top))}
 .desktop-actions{display:flex;gap:8px;align-items:center}
-.sound-toggle{display:grid;place-items:center;width:44px;height:44px;padding:0}
+.sound-toggle,.icon-button{display:grid;place-items:center;width:44px;height:44px;padding:0}
+#open-computer{display:none}
+.monitor-icon{width:24px;height:24px;background:currentColor;mask:url('/icons/device-desktop.svg') center / contain no-repeat}
 .sound-toggle[aria-pressed="true"]{background:#444052}
 .sound-icon{width:24px;height:24px;background:currentColor;mask:url('/icons/volume.svg') center / contain no-repeat}
 .sound-toggle[aria-pressed="false"] .sound-icon{mask-image:url('/icons/volume-off.svg')}
@@ -244,7 +246,7 @@ body:has(#computer:not([hidden])) #sound-room{visibility:hidden}
     border:1px solid #fff8;box-shadow:0 2px 6px #0004;pointer-events:none;
   }
   #joystick.is-held .joystick-thumb{background:#f7efdcc7}
-  #open-computer{display:block;min-height:44px;background:#242b22ed}
+  #open-computer{display:grid}
   #sit{min-height:44px}
   #sit:not([hidden]) + #open-computer,#hint,#instruction,#controls kbd,#stand kbd{display:none}
   #music-credit{bottom:calc(3px + env(safe-area-inset-bottom));left:max(8px,env(safe-area-inset-left))}
@@ -267,9 +269,14 @@ body:has(#computer:not([hidden])) #sound-room{visibility:hidden}
   }
   body:has(#music-credit:not([hidden])) .mac-window{bottom:calc(26px + env(safe-area-inset-bottom))}
   .window-content{min-height:0;flex:1;touch-action:pan-y}
-  .window-titlebar{min-height:44px;padding:0 100px}
+  .mac-window.is-expanded{
+    top:calc(60px + env(safe-area-inset-top));left:env(safe-area-inset-left);
+    right:env(safe-area-inset-right);bottom:env(safe-area-inset-bottom);border-radius:0;
+  }
+  .window-titlebar{min-height:44px;padding:0 12px 0 132px}
+  .window-titlebar>span{max-width:100%;overflow:hidden;text-overflow:ellipsis}
+  @media (min-width: 370px){.window-titlebar{padding-inline:126px}}
   .traffic-lights{left:3px;gap:0}
   .traffic-lights button{width:42px;height:44px}
-  .traffic-lights .light-zoom{display:none}
   .folder-back{min-height:44px}
 }
