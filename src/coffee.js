@@ -89,29 +89,62 @@ export function createCoffeeStation(scene, box) {
   stream.visible = false;
   station.add(stream);
 
+  const steamCanvas = document.createElement('canvas');
+  steamCanvas.width = steamCanvas.height = 64;
+  const ctx = steamCanvas.getContext('2d');
+  const gradient = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+  gradient.addColorStop(0, '#fff9ed');
+  gradient.addColorStop(0.38, 'rgba(255, 249, 237, 0.48)');
+  gradient.addColorStop(1, 'rgba(255, 249, 237, 0)');
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, 64, 64);
+  const steamTexture = new THREE.CanvasTexture(steamCanvas);
+  steamTexture.colorSpace = THREE.SRGBColorSpace;
+  const vapor = Array.from({ length: 7 }, () => {
+    const puff = new THREE.Sprite(new THREE.SpriteMaterial({
+      map: steamTexture, transparent: true, opacity: 0, depthWrite: false
+    }));
+    puff.visible = false;
+    station.add(puff);
+    return puff;
+  });
+
   let started = null;
-  let finished = false;
+  let finishedAt = null;
   const duration = 2700;
   return {
     station,
     get brewing() { return started !== null; },
-    get finished() { return finished; },
+    get finished() { return finishedAt !== null; },
     start(now) {
       if (started !== null) return;
       started = now;
-      finished = false;
+      finishedAt = null;
       coffee.visible = false;
     },
     update(now, reduceMotion) {
-      if (started === null) return;
-      const progress = Math.min(1, (now - started) / duration);
-      stream.visible = !reduceMotion && progress > 0.12 && progress < 0.92;
-      coffee.visible = progress > 0.25;
-      coffee.position.y = 0.023 + 0.063 * progress;
-      indicator.material.emissiveIntensity = progress === 1 ? 0.25 : 1.45;
-      if (progress === 1) {
-        started = null;
-        finished = true;
+      if (started !== null) {
+        const progress = Math.min(1, (now - started) / duration);
+        stream.visible = !reduceMotion && progress > 0.12 && progress < 0.92;
+        coffee.visible = progress > 0.25;
+        coffee.position.y = 0.023 + 0.063 * progress;
+        indicator.material.emissiveIntensity = progress === 1 ? 0.25 : 1.45;
+        if (progress === 1) {
+          finishedAt = started + duration;
+          started = null;
+        }
+      }
+      const steamAge = finishedAt === null ? 0 : (now - finishedAt) / 1000;
+      for (const [index, puff] of vapor.entries()) {
+        const elapsed = steamAge - index * 0.26;
+        puff.visible = !reduceMotion && elapsed > 0 && steamAge < 16;
+        if (!puff.visible) continue;
+        const phase = (elapsed / 2.05) % 1;
+        const remainingHeat = Math.min(1, (16 - steamAge) / 5);
+        const drift = Math.sin(elapsed * 2.2 + index * 0.72) * phase * 0.027;
+        puff.position.set(drift, 0.14 + phase * 0.23, 0.127 + phase * 0.084);
+        puff.scale.set(0.029 + phase * 0.051, 0.043 + phase * 0.085, 1);
+        puff.material.opacity = Math.sin(phase * Math.PI) * remainingHeat * 0.33;
       }
     }
   };

@@ -6,7 +6,7 @@ const computer = document.querySelector('#computer');
 const ambience = [music, rain];
 // Click recording by Darklanlan, CC0 1.0, from Wikimedia Commons (Computer mouse single click.ogg).
 const footsteps = ['footstep-1', 'footstep-2', 'footstep-3', 'footstep-4'];
-const samples = ['click-desk', ...footsteps, 'chair-sit', 'chair-stand'];
+const samples = ['click-desk', ...footsteps, 'chair-sit', 'chair-stand', 'coffee-brew'];
 const effects = new Map();
 const activeEffects = new Set();
 
@@ -48,6 +48,10 @@ export function playFootstep(onRug) {
 
 export function playChair(standing) {
   playEffect(standing ? 'chair-stand' : 'chair-sit', 0.72);
+}
+
+export function playCoffeeBrew() {
+  playEffect('coffee-brew', 0.3);
 }
 
 async function prepareEffects() {

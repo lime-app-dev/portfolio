@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import './style.css';
-import { playChair, playFootstep } from './audio.js';
+import { playChair, playCoffeeBrew, playFootstep } from './audio.js';
 import { resetDesktop } from './desktop.js';
 import { drawCodeEditor } from './code-editor-display.js';
 import { createCoffeeStation, createMug } from './coffee.js';
@@ -590,8 +590,8 @@ box('#bdc9b8', [0.0024, 0.0024, 0.0012], [0, 0.0005, 0.0236], chargingCase, 0.00
 const shopifyLogo = textureLoader.load(import.meta.env.BASE_URL + 'icons/shopify.svg');
 shopifyLogo.colorSpace = THREE.SRGBColorSpace;
 const { mug: deskMug } = createMug('#95bf47', shopifyLogo);
-deskMug.position.set(0.98, 0.926, -1.43);
-deskMug.rotation.y = -0.82;
+deskMug.position.set(-1.14, 0.926, -2.43);
+deskMug.rotation.y = 0.42;
 scene.add(deskMug);
 
 const deskCenter = 1.63;
@@ -671,6 +671,7 @@ function nearCoffee() {
 function brewCoffee() {
   if (mode !== 'walking' || !nearCoffee() || coffeeStation.brewing) return;
   coffeeStation.start(performance.now());
+  playCoffeeBrew();
 }
 
 function sitDown() {
