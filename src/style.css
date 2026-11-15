@@ -267,6 +267,7 @@ body:has(#computer:not([hidden])) #sound-room{visibility:hidden}
     right:max(12px,env(safe-area-inset-right));
   }
   .cabin-actions{display:flex;justify-self:stretch;align-items:end;justify-content:space-between;gap:8px}
+  #hint{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);white-space:nowrap}
   #joystick{
     display:grid;place-items:center;width:78px;height:78px;
     border:1px solid #f7efdc58;border-radius:50%;background:#20272080;
@@ -279,7 +280,7 @@ body:has(#computer:not([hidden])) #sound-room{visibility:hidden}
   }
   #joystick.is-held .joystick-thumb{background:#f7efdcc7}
   #sit,#brew-coffee,#fridge-door{min-height:44px}
-  #sit:not([hidden]) ~ #open-computer,#brew-coffee:not([hidden]) ~ #open-computer,#fridge-door:not([hidden]) ~ #open-computer,#hint,#instruction,#controls kbd,#stand kbd{display:none}
+  #sit:not([hidden]) ~ #open-computer,#brew-coffee:not([hidden]) ~ #open-computer,#fridge-door:not([hidden]) ~ #open-computer,#instruction,#controls kbd,#stand kbd{display:none}
   #music-credit{bottom:calc(3px + env(safe-area-inset-bottom));left:max(8px,env(safe-area-inset-left))}
   body:has(#music-credit:not([hidden])) #controls{bottom:calc(26px + env(safe-area-inset-bottom))}
   .bar{
