@@ -37,7 +37,8 @@ function box(color, size, position, parent = scene, radius = 0) {
   return object;
 }
 
-scene.add(new THREE.HemisphereLight('#f8f8f8', '#727272', 1.4));
+const skyLight = new THREE.HemisphereLight('#f8f8f8', '#727272', 1.4);
+scene.add(skyLight);
 const sun = new THREE.DirectionalLight('#e1e9ff', 1.65);
 sun.position.set(-1, 4, -2.6);
 sun.castShadow = true;
@@ -105,6 +106,65 @@ for (const wall of walls) {
   wall.material.map = wallWallpaper;
 }
 box('#626262', [7, 0.12, 7], [0, 3.35, 0]);
+
+const wallClock = new THREE.Group();
+wallClock.position.set(3.425, 2.27, -0.62);
+wallClock.rotation.y = -Math.PI / 2;
+scene.add(wallClock);
+
+const clockRim = new THREE.Mesh(
+  new THREE.CylinderGeometry(0.233, 0.233, 0.039, 64),
+  new THREE.MeshStandardMaterial({ color: '#242126', metalness: 0.35, roughness: 0.39 })
+);
+clockRim.rotation.x = Math.PI / 2;
+clockRim.castShadow = true;
+wallClock.add(clockRim);
+
+const dialCanvas = document.createElement('canvas');
+dialCanvas.width = dialCanvas.height = 256;
+const dial = dialCanvas.getContext('2d');
+dial.fillStyle = '#eee6d6';
+dial.fillRect(0, 0, 256, 256);
+dial.translate(128, 128);
+dial.textAlign = 'center';
+dial.textBaseline = 'middle';
+dial.font = '18px Georgia';
+for (let minute = 0; minute < 60; minute += 1) {
+  const angle = minute * Math.PI / 30;
+  const major = minute % 5 === 0;
+  const inner = major ? 103 : 110;
+  dial.strokeStyle = major ? '#342d30' : '#776c67';
+  dial.lineWidth = major ? 2 : 1;
+  dial.beginPath();
+  dial.moveTo(Math.sin(angle) * inner, -Math.cos(angle) * inner);
+  dial.lineTo(Math.sin(angle) * 117, -Math.cos(angle) * 117);
+  dial.stroke();
+  if (major) {
+    dial.fillStyle = '#342d30';
+    dial.fillText(String(minute / 5 || 12), Math.sin(angle) * 87, -Math.cos(angle) * 87);
+  }
+}
+dial.font = '10px system-ui';
+dial.fillText('GMT+2', 0, 53);
+const clockTexture = new THREE.CanvasTexture(dialCanvas);
+clockTexture.colorSpace = THREE.SRGBColorSpace;
+const clockFace = new THREE.Mesh(
+  new THREE.CircleGeometry(0.213, 64),
+  new THREE.MeshStandardMaterial({ map: clockTexture, roughness: 0.83 })
+);
+clockFace.position.z = 0.020;
+wallClock.add(clockFace);
+
+function clockHand(length, width, depth, color) {
+  const pivot = new THREE.Group();
+  pivot.position.z = depth;
+  wallClock.add(pivot);
+  box(color, [width, length, 0.002], [0, length / 2 - 0.012, 0], pivot, 0.001).castShadow = false;
+  return pivot;
+}
+const hourHand = clockHand(0.104, 0.013, 0.024, '#312a31');
+const minuteHand = clockHand(0.152, 0.009, 0.028, '#312a31');
+const secondHand = clockHand(0.178, 0.004, 0.032, '#9d5145');
 
 const entry = wood('#c1a58d', [0.98, 2.22, 0.082], [0.27, 1.11, 3.405]);
 entry.material.roughness = 0.67;
@@ -1020,7 +1080,39 @@ let lastFrame = performance.now();
 let codeElapsed = 0;
 let nextCodeFrame = 0;
 let codeReduced = false;
+const dayTint = new THREE.Color('#f1f4ff');
+const nightTint = new THREE.Color('#293a65');
+const daySky = new THREE.Color('#84909e');
+const nightSky = new THREE.Color('#10192a');
+let lastClockSecond = -1;
+
+function updateCabinTime() {
+  const now = Date.now();
+  const second = Math.floor(now / 1000);
+  if (second === lastClockSecond) return;
+  lastClockSecond = second;
+
+  const local = new Date(now + 2 * 60 * 60 * 1000);
+  const minutes = local.getUTCMinutes() + local.getUTCSeconds() / 60;
+  const hours = local.getUTCHours() + minutes / 60;
+  hourHand.rotation.z = -hours * Math.PI / 6;
+  minuteHand.rotation.z = -minutes * Math.PI / 30;
+  secondHand.rotation.z = -local.getUTCSeconds() * Math.PI / 30;
+
+  const daylight = THREE.MathUtils.smoothstep(hours, 5.5, 7)
+    * (1 - THREE.MathUtils.smoothstep(hours, 18, 20));
+  view.material.color.lerpColors(nightTint, dayTint, daylight);
+  scene.background.lerpColors(nightSky, daySky, daylight);
+  sun.intensity = THREE.MathUtils.lerp(0.12, 1.65, daylight);
+  skyLight.intensity = THREE.MathUtils.lerp(0.59, 1.4, daylight);
+  interiorFill.intensity = THREE.MathUtils.lerp(0.43, 0.95, daylight);
+  bouncedLight.intensity = THREE.MathUtils.lerp(0.38, 1.05, daylight);
+  rain.material.opacity = THREE.MathUtils.lerp(0.11, 0.23, daylight);
+  windowReflection.material.opacity = THREE.MathUtils.lerp(0.31, 0.19, daylight);
+}
+
 renderer.setAnimationLoop(now => {
+  updateCabinTime();
   const dt = Math.min(Math.max(0, now - lastFrame) / 1000, 0.05);
   lastFrame = now;
   if (mode === 'walking') {
