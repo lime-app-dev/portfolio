@@ -104,16 +104,15 @@ kbd{margin-left:.35em;font:inherit;opacity:.68}
 .light-zoom{--traffic-color:#28c940}
 .window-content{overflow:auto;overscroll-behavior:contain;background:#f7f7f1}
 .project-hero{
-  --project-screenshot:url('/projects/lime-build-a-box.png');
-  padding:clamp(24px,5vw,44px);
-  color:#fffaf1;
-  background:linear-gradient(90deg,#151915f2 0%,#151915dc 48%,#15191580),var(--project-screenshot) center / cover;
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  color:#28252d;background:#f0edf4;
 }
-.spread-hero{--project-screenshot:url('/projects/spread.jpg')}
+.project-hero-image{display:block;width:100%;height:100%;min-height:0;object-fit:cover;object-position:top center}
+.project-hero-copy{align-self:center;min-width:0;padding:clamp(20px,3.5vw,36px)}
 .project-hero .window-eyebrow,.project-hero .project-source{color:inherit}
-.project-hero .project-source:focus-visible{outline-color:currentColor}
 @media(max-width:540px){
-  .project-hero{background-image:linear-gradient(#151915d9,#151915e8),var(--project-screenshot)}
+  .project-hero{grid-template-columns:minmax(0,1fr)}
+  .project-hero-image{height:auto;aspect-ratio:16/9}
 }
 .project-identity{display:flex;align-items:center;gap:14px}
 .project-icon{
@@ -122,7 +121,7 @@ kbd{margin-left:.35em;font:inherit;opacity:.68}
 }
 .window-eyebrow{margin:0 0 6px;color:#4b553a;font-size:.75rem;font-weight:650}
 .project-hero h2{
-  font:700 clamp(2.15rem,6.6vw,3.55rem)/1 -apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+  font:700 clamp(1.9rem,4vw,3rem)/1 -apple-system,BlinkMacSystemFont,system-ui,sans-serif;
   margin:0;letter-spacing:-.058em;
 }
 .project-hero h2:focus{outline:none}
