@@ -208,11 +208,15 @@ body:has(#computer:not([hidden])) #sound-room{visibility:hidden}
   padding:4px 12px;background:#fcfcfe;border-bottom:1px solid #e1e2e9;
 }
 #copy-window-link{
-  margin-inline-start:auto;padding:7px 11px;min-height:36px;border:1px solid #dedce9;
-  border-radius:7px;background:#f3f1f8;color:#353047;font:650 .76rem system-ui;
+  position:absolute;inset-inline-end:6px;display:grid;place-items:center;
+  width:44px;height:44px;padding:0;border:0;border-radius:7px;background:transparent;color:#353047;
 }
-#copy-window-link:hover,#copy-window-link:focus-visible{outline-color:#635389}
-.share-status{font-size:.75rem;color:#4c465d}
+#copy-window-link:hover{background:#e8e4f1;outline:none}
+#copy-window-link:focus-visible{outline:2px solid #635389;outline-offset:-4px}
+.share-status{
+  position:absolute;top:calc(100% + 6px);inset-inline-end:8px;z-index:2;pointer-events:none;
+  padding:4px 8px;border-radius:6px;background:#353047;color:#fff;font-size:.75rem;
+}
 #share-url{padding:.5rem 1rem;color:#242530;background:#f5f5fa;font-size:.8rem}
 .finder-brand{letter-spacing:.015em}
 #computer .desktop-actions button{
@@ -329,10 +333,10 @@ body:has(#computer:not([hidden])) #sound-room{visibility:hidden}
     right:env(safe-area-inset-right);bottom:env(safe-area-inset-bottom);border-radius:0;
   }
   .window-titlebar{min-height:44px;padding:0 86px}
-  .window-titlebar>span{max-width:100%;overflow:hidden;text-overflow:ellipsis}
+  .window-titlebar>#window-title{max-width:100%;overflow:hidden;text-overflow:ellipsis}
   .traffic-lights{left:3px;gap:0}
   .traffic-lights button{width:27px;height:44px}
-  .folder-back,#copy-window-link{min-height:44px}
+  .folder-back{min-height:44px}
   #launcher{display:grid;grid-template-columns:repeat(2,minmax(0,110px));justify-content:start}
   .desktop-shortcut{min-width:0;width:100%}
 }

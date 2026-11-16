@@ -59,7 +59,7 @@ export function openFolder(folder, returnFrom) {
   else clearFolderLink();
   windowElement.hidden = false;
   backButton.hidden = !selected.dataset.parentFolder;
-  toolbar.hidden = backButton.hidden && shareButton.hidden;
+  toolbar.hidden = backButton.hidden;
   for (const panel of panels) panel.hidden = panel !== selected;
   const heading = selected.querySelector('h2');
   title.textContent = selected.dataset.windowTitle ?? heading.textContent;
