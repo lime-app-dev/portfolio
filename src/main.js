@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import './style.css';
+import { addDeskPeripherals } from './desk-peripherals.js';
 import { playChair, playCoffeeBrew, playFootstep, playFridgeDoor, setComputerAmbience } from './audio.js';
 import { clearFolderLink, linkedFolder, openFolder, resetDesktop } from './desktop.js';
 import { drawCodeEditor } from './code-editor-display.js';
@@ -675,22 +676,7 @@ const mainDisplay = { x: -0.47, y: 1.38, z: -2.86, angle: 0.13 };
 const updateMainDisplay = display(mainDisplay.x, mainDisplay.angle, false);
 const updateSecondaryDisplay = display(0.5, -0.31, true);
 
-box('#1b1b20', [0.63, 0.037, 0.215], [-0.42, 0.95, -2.4], scene, 0.015);
-for (let row = 0; row < 4; row += 1) {
-  for (let col = 0; col < 13; col += 1) {
-    const purple = col === 0 || col > 10 || row === 0;
-    box(purple ? '#8854c0' : '#302938', [0.04, 0.015, 0.036], [-0.70 + col * 0.046, 0.977, -2.47 + row * 0.046], scene, 0.006);
-  }
-}
-const mouse = new THREE.Mesh(
-  new THREE.SphereGeometry(1, 32, 16),
-  new THREE.MeshStandardMaterial({ color: '#222027', roughness: 0.46 })
-);
-mouse.position.set(0.18, 0.956, -2.42);
-mouse.scale.set(0.061, 0.043, 0.093);
-mouse.castShadow = true;
-scene.add(mouse);
-box('#8059aa', [0.013, 0.014, 0.024], [0.18, 0.996, -2.45], scene, 0.005);
+addDeskPeripherals(scene, box);
 
 const chair = new THREE.Group();
 chair.position.set(0, 0, -1.54);
