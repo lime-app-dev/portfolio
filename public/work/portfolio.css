@@ -20,15 +20,15 @@ a { color: #4c3479; text-underline-offset: 4px }
   align-items: center;
   min-height: clamp(440px, 66vw, 640px);
   overflow: hidden;
-  background: #211733;
-  color: #fff;
+  background: #242424;
+  color: #f7f3ea;
 }
 .portfolio-hero::after {
   content: "";
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: linear-gradient(90deg, #191919f2 4%, #222222dc 48%, #25252593), linear-gradient(0deg, #191919de, transparent 70%);
+  background: linear-gradient(90deg, #171717d9 4%, #222222b3 48%, #25252555), linear-gradient(0deg, #191919a6, transparent 70%);
 }
 .hero-content, .portfolio-content {
   width: min(100% - clamp(32px, 10vw, 144px), 1120px);
@@ -36,9 +36,9 @@ a { color: #4c3479; text-underline-offset: 4px }
 }
 .hero-content { padding-block: 54px 72px }
 .hero-content h1 { font-size: clamp(3rem, 8vw, 7rem); margin: .36em 0 .17em }
-.hero-content p { max-width: 52ch; color: #f2edf9 }
+.hero-content p { max-width: 52ch; color: inherit }
 .hero-content .role { font-weight: 650; font-size: clamp(1rem, 2vw, 1.25rem) }
-.hero-content a { color: #fff }
+.hero-content a { color: inherit }
 .studio-link { font-size: .86rem; font-weight: 650 }
 nav, .links { display: flex; flex-wrap: wrap; gap: 8px 18px }
 nav { margin-top: 24px }
@@ -46,11 +46,11 @@ nav a {
   padding: 8px 13px;
   border: 1px solid #ffffff64;
   border-radius: 6px;
-  background: #241937b3;
+  background: #242424c9;
   text-decoration: none;
   font-size: .85rem;
 }
-nav a:hover { background: #4b3866 }
+nav a:hover { background: #404040 }
 .marquee {
   position: absolute;
   z-index: -2;
@@ -128,4 +128,11 @@ label[for="pause-marquee"] {
   object-position: top;
   margin: 0 calc(-1 * var(--card-padding)) 20px;
   border-bottom: 1px solid #dfd6ea;
+}
+
+@media (max-width: 600px) {
+  .portfolio-hero::after {
+    background: linear-gradient(180deg, #19191955, #191919c9 25%, #191919c9 72%, #19191966);
+  }
+  .hero-content { text-shadow: 0 1px 5px #111b }
 }
