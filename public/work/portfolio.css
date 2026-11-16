@@ -6,7 +6,6 @@
 }
 * { box-sizing: border-box }
 body { margin: 0 }
-main img { filter: grayscale(1) }
 h1, h2 { font-family: Georgia, serif; font-weight: 500; line-height: 1.08; letter-spacing: -.04em }
 h2 { font-size: clamp(2rem, 5vw, 3.2rem); margin: 0 0 1.25rem }
 h3 { font-size: 1.15rem; line-height: 1.25; margin: 0 0 .4rem }
