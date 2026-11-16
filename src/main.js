@@ -113,9 +113,37 @@ wallClock.rotation.y = -Math.PI / 2;
 wallClock.scale.set(1.9, 1.9, 1);
 scene.add(wallClock);
 
+const clockSilver = new THREE.MeshStandardMaterial({ color: '#d8dee7', metalness: 0.42, roughness: 0.28 });
+const crystalMaterial = new THREE.MeshPhysicalMaterial({
+  color: '#dbe9fb', metalness: 0.18, roughness: 0.16,
+  clearcoat: 1, clearcoatRoughness: 0.14, flatShading: true
+});
+const spokeGeometry = new THREE.CylinderGeometry(0.0022, 0.0028, 1, 6);
+const crystalGeometry = new THREE.IcosahedronGeometry(1, 0);
+for (let index = 0; index < 48; index += 1) {
+  const angle = index * Math.PI / 24;
+  const tier = index % 4;
+  const radius = [0.425, 0.379, 0.345, 0.389][tier];
+  const innerRadius = 0.226;
+  const spoke = new THREE.Mesh(spokeGeometry, clockSilver);
+  spoke.scale.y = radius - innerRadius;
+  const midpoint = (radius + innerRadius) / 2;
+  spoke.position.set(Math.sin(angle) * midpoint, Math.cos(angle) * midpoint, 0.011);
+  spoke.rotation.z = -angle;
+  wallClock.add(spoke);
+
+  const crystalRadius = tier === 0 ? radius : radius - (tier === 2 ? 0.046 : 0.031);
+  const crystal = new THREE.Mesh(crystalGeometry, crystalMaterial);
+  const size = tier === 0 ? 0.017 : 0.0105;
+  crystal.scale.set(size, size, size * 0.8);
+  crystal.position.set(Math.sin(angle) * crystalRadius, Math.cos(angle) * crystalRadius, 0.023);
+  crystal.rotation.set(index * 0.37, index * 0.21, angle);
+  wallClock.add(crystal);
+}
+
 const clockRim = new THREE.Mesh(
   new THREE.CylinderGeometry(0.233, 0.233, 0.039, 64),
-  new THREE.MeshStandardMaterial({ color: '#e8c49b', bumpMap: timber, bumpScale: 0.004, roughness: 0.63 })
+  clockSilver
 );
 clockRim.rotation.x = Math.PI / 2;
 clockRim.castShadow = true;
@@ -124,39 +152,41 @@ wallClock.add(clockRim);
 const dialCanvas = document.createElement('canvas');
 dialCanvas.width = dialCanvas.height = 512;
 const dial = dialCanvas.getContext('2d');
-const dialGradient = dial.createLinearGradient(0, 0, 512, 512);
-dialGradient.addColorStop(0, '#3a3636');
-dialGradient.addColorStop(1, '#191819');
+const dialGradient = dial.createConicGradient(Math.PI / 6, 256, 256);
+dialGradient.addColorStop(0, '#bcc2ce');
+dialGradient.addColorStop(0.20, '#f6f8fc');
+dialGradient.addColorStop(0.47, '#c5cbd4');
+dialGradient.addColorStop(0.70, '#f1f4fa');
+dialGradient.addColorStop(1, '#bcc2ce');
 dial.fillStyle = dialGradient;
 dial.fillRect(0, 0, 512, 512);
-
-for (let x = 64; x < 512; x += 77) {
-  dial.fillStyle = '#0e0d0f';
-  dial.fillRect(x, 0, 2, 512);
-  dial.fillStyle = '#ffffff0e';
-  dial.fillRect(x + 2, 0, 1, 512);
-}
 dial.translate(256, 256);
+dial.strokeStyle = '#454955';
+dial.lineWidth = 1.5;
+for (const radius of [237, 246]) {
+  dial.beginPath();
+  dial.arc(0, 0, radius, 0, Math.PI * 2);
+  dial.stroke();
+}
 dial.textAlign = 'center';
 dial.textBaseline = 'middle';
-dial.font = '700 67px system-ui';
+dial.font = '62px Georgia, serif';
+dial.fillStyle = '#191d25';
 for (let minute = 0; minute < 60; minute += 1) {
   const angle = minute * Math.PI / 30;
   const major = minute % 5 === 0;
-  dial.fillStyle = major ? '#e6d8bd' : '#c1b8a9';
+  dial.lineWidth = major ? 2 : 0.9;
   dial.beginPath();
-  dial.arc(Math.sin(angle) * 232, -Math.cos(angle) * 232, major ? 4.5 : 2.8, 0, Math.PI * 2);
-  dial.fill();
-  if (major) {
-    dial.fillStyle = '#dfbd91';
-    dial.fillText(String(minute / 5 || 12), Math.sin(angle) * 176, -Math.cos(angle) * 176);
-  }
+  dial.moveTo(Math.sin(angle) * (major ? 234 : 241), -Math.cos(angle) * (major ? 234 : 241));
+  dial.lineTo(Math.sin(angle) * 246, -Math.cos(angle) * 246);
+  dial.stroke();
+  if (major) dial.fillText(String(minute / 5 || 12), Math.sin(angle) * 192, -Math.cos(angle) * 192);
 }
 const clockTexture = new THREE.CanvasTexture(dialCanvas);
 clockTexture.colorSpace = THREE.SRGBColorSpace;
 const clockFace = new THREE.Mesh(
   new THREE.CircleGeometry(0.213, 64),
-  new THREE.MeshStandardMaterial({ map: clockTexture, roughness: 0.48, emissive: '#a49785', emissiveIntensity: 0.13, emissiveMap: clockTexture })
+  new THREE.MeshStandardMaterial({ map: clockTexture, roughness: 0.48, emissive: '#b9c4d8', emissiveIntensity: 0.16, emissiveMap: clockTexture })
 );
 clockFace.position.z = 0.020;
 wallClock.add(clockFace);
@@ -168,9 +198,15 @@ function clockHand(length, width, depth, color) {
   box(color, [width, length, 0.002], [0, length / 2 - 0.012, 0], pivot, 0.001).castShadow = false;
   return pivot;
 }
-const hourHand = clockHand(0.104, 0.013, 0.024, '#e4bd81');
-const minuteHand = clockHand(0.152, 0.009, 0.028, '#e4bd81');
-const secondHand = clockHand(0.162, 0.0025, 0.032, '#aa8662');
+const hourHand = clockHand(0.104, 0.013, 0.024, '#161922');
+const minuteHand = clockHand(0.152, 0.009, 0.028, '#161922');
+const secondHand = clockHand(0.162, 0.0025, 0.032, '#343942');
+const clockPin = new THREE.Mesh(
+  new THREE.CircleGeometry(0.005, 20),
+  new THREE.MeshStandardMaterial({ color: '#d0b075', metalness: 0.45, roughness: 0.28 })
+);
+clockPin.position.z = 0.035;
+wallClock.add(clockPin);
 
 const entry = wood('#c1a58d', [0.98, 2.22, 0.082], [0.27, 1.11, 3.405]);
 entry.material.roughness = 0.67;
