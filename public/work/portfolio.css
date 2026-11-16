@@ -49,7 +49,7 @@ a { color: #3d3a35; text-underline-offset: 4px }
   display: block;
   width: 100%;
   aspect-ratio: 2.2;
-  object-fit: contain;
+  object-fit: scale-down;
   background: #1c1c1c;
 }
 .gallery-slides figcaption { padding: 7px 12px; color: #ddd; font-size: .8rem }
