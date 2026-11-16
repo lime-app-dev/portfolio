@@ -54,23 +54,20 @@ nav a:hover { background: #4b3866 }
 .marquee {
   position: absolute;
   z-index: -2;
-  inset: -16% -10%;
+  inset: 0;
   display: grid;
-  align-content: center;
-  gap: 16px;
-  transform: rotate(-8deg);
+  grid-template-rows: repeat(2, minmax(0, 1fr));
   pointer-events: none;
 }
 .marquee-track, .marquee-track > div { display: flex; width: max-content }
 .marquee-track { animation: marquee 62s linear infinite }
 .marquee-track:nth-child(2) { animation-direction: reverse; animation-duration: 72s }
 .marquee img {
-  width: clamp(260px, 34vw, 510px);
-  aspect-ratio: 16/10;
+  display: block;
+  width: max(280px, 34vw);
+  height: 100%;
   object-fit: cover;
   object-position: top;
-  margin-inline-end: 16px;
-  border-radius: 10px;
 }
 @keyframes marquee { to { transform: translateX(calc(-100% / 3)) } }
 #pause-marquee, label[for="pause-marquee"] {
