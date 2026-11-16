@@ -110,89 +110,53 @@ box('#626262', [7, 0.12, 7], [0, 3.35, 0]);
 const wallClock = new THREE.Group();
 wallClock.position.set(3.425, 2.27, -0.62);
 wallClock.rotation.y = -Math.PI / 2;
+wallClock.scale.set(1.9, 1.9, 1);
 scene.add(wallClock);
 
 const clockRim = new THREE.Mesh(
   new THREE.CylinderGeometry(0.233, 0.233, 0.039, 64),
-  new THREE.MeshStandardMaterial({ color: '#17232d', metalness: 0.4, roughness: 0.32 })
+  new THREE.MeshStandardMaterial({ color: '#e8c49b', bumpMap: timber, bumpScale: 0.004, roughness: 0.63 })
 );
 clockRim.rotation.x = Math.PI / 2;
 clockRim.castShadow = true;
 wallClock.add(clockRim);
 
 const dialCanvas = document.createElement('canvas');
-dialCanvas.width = dialCanvas.height = 256;
+dialCanvas.width = dialCanvas.height = 512;
 const dial = dialCanvas.getContext('2d');
-const dialGradient = dial.createLinearGradient(0, 224, 236, 32);
-dialGradient.addColorStop(0, '#0b1d35');
-dialGradient.addColorStop(0.55, '#1b4a62');
-dialGradient.addColorStop(1, '#568494');
+const dialGradient = dial.createLinearGradient(0, 0, 512, 512);
+dialGradient.addColorStop(0, '#3a3636');
+dialGradient.addColorStop(1, '#191819');
 dial.fillStyle = dialGradient;
-dial.fillRect(0, 0, 256, 256);
+dial.fillRect(0, 0, 512, 512);
 
-const facets = [
-  ['#67acb988', [[0, 51], [138, 0], [94, 119], [0, 164]]],
-  ['#102d51bb', [[138, 0], [208, 0], [179, 85], [94, 119]]],
-  ['#80c0c166', [[179, 85], [256, 29], [256, 98], [137, 181]]],
-  ['#337c9bb0', [[0, 164], [94, 119], [137, 181], [76, 256], [0, 239]]],
-  ['#142748cd', [[137, 181], [256, 98], [256, 222], [204, 256], [76, 256]]]
-];
-for (const [color, points] of facets) {
-  dial.fillStyle = color;
-  dial.beginPath();
-  dial.moveTo(...points[0]);
-  for (const point of points.slice(1)) dial.lineTo(...point);
-  dial.closePath();
-  dial.fill();
+for (let x = 64; x < 512; x += 77) {
+  dial.fillStyle = '#0e0d0f';
+  dial.fillRect(x, 0, 2, 512);
+  dial.fillStyle = '#ffffff0e';
+  dial.fillRect(x + 2, 0, 1, 512);
 }
-
-dial.save();
-dial.beginPath();
-dial.moveTo(194, 29);
-dial.lineTo(256, 12);
-dial.lineTo(256, 239);
-dial.lineTo(208, 209);
-dial.closePath();
-dial.clip();
-dial.strokeStyle = '#b9e4ed65';
-dial.lineWidth = 1;
-for (let x = 100; x < 420; x += 7) {
-  dial.beginPath();
-  dial.moveTo(x, 0);
-  dial.lineTo(x - 195, 256);
-  dial.stroke();
-}
-dial.restore();
-
-dial.translate(128, 128);
+dial.translate(256, 256);
 dial.textAlign = 'center';
 dial.textBaseline = 'middle';
-dial.font = '500 22px system-ui';
-dial.shadowColor = '#0a172c';
-dial.shadowBlur = 3;
+dial.font = '700 67px system-ui';
 for (let minute = 0; minute < 60; minute += 1) {
   const angle = minute * Math.PI / 30;
   const major = minute % 5 === 0;
-  const inner = major ? 103 : 110;
-  dial.strokeStyle = major ? '#e7f5fa' : '#c3dce48a';
-  dial.lineWidth = major ? 2 : 1;
+  dial.fillStyle = major ? '#e6d8bd' : '#c1b8a9';
   dial.beginPath();
-  dial.moveTo(Math.sin(angle) * inner, -Math.cos(angle) * inner);
-  dial.lineTo(Math.sin(angle) * 117, -Math.cos(angle) * 117);
-  dial.stroke();
+  dial.arc(Math.sin(angle) * 232, -Math.cos(angle) * 232, major ? 4.5 : 2.8, 0, Math.PI * 2);
+  dial.fill();
   if (major) {
-    dial.fillStyle = '#f3fafe';
-    dial.fillText(String(minute / 5 || 12), Math.sin(angle) * 87, -Math.cos(angle) * 87);
+    dial.fillStyle = '#dfbd91';
+    dial.fillText(String(minute / 5 || 12), Math.sin(angle) * 176, -Math.cos(angle) * 176);
   }
 }
-dial.font = '10px system-ui';
-dial.fillStyle = '#d4e9f0';
-dial.fillText('GMT+2', 0, 53);
 const clockTexture = new THREE.CanvasTexture(dialCanvas);
 clockTexture.colorSpace = THREE.SRGBColorSpace;
 const clockFace = new THREE.Mesh(
   new THREE.CircleGeometry(0.213, 64),
-  new THREE.MeshStandardMaterial({ map: clockTexture, roughness: 0.48, emissive: '#45697b', emissiveIntensity: 0.18, emissiveMap: clockTexture })
+  new THREE.MeshStandardMaterial({ map: clockTexture, roughness: 0.48, emissive: '#a49785', emissiveIntensity: 0.13, emissiveMap: clockTexture })
 );
 clockFace.position.z = 0.020;
 wallClock.add(clockFace);
@@ -204,9 +168,9 @@ function clockHand(length, width, depth, color) {
   box(color, [width, length, 0.002], [0, length / 2 - 0.012, 0], pivot, 0.001).castShadow = false;
   return pivot;
 }
-const hourHand = clockHand(0.104, 0.013, 0.024, '#f3f1e9');
-const minuteHand = clockHand(0.152, 0.009, 0.028, '#f3f1e9');
-const secondHand = clockHand(0.178, 0.004, 0.032, '#71c4d2');
+const hourHand = clockHand(0.104, 0.013, 0.024, '#e4bd81');
+const minuteHand = clockHand(0.152, 0.009, 0.028, '#e4bd81');
+const secondHand = clockHand(0.162, 0.0025, 0.032, '#aa8662');
 
 const entry = wood('#c1a58d', [0.98, 2.22, 0.082], [0.27, 1.11, 3.405]);
 entry.material.roughness = 0.67;
@@ -556,6 +520,15 @@ for (const [x, z] of [[-1.32, -2.98], [-1.32, -2.28], [1.15, -2.98], [1.15, -0.9
 }
 box('#353137', [1.15, 0.014, 0.36], [-0.26, 0.928, -2.39], scene, 0.007);
 
+const computerTime = document.querySelector('#computer-time');
+const cabinTimeFormatter = new Intl.DateTimeFormat('en-US', {
+  timeZone: 'UTC', hour: 'numeric', minute: '2-digit', hour12: true
+});
+
+function cabinTime(now = Date.now()) {
+  return new Date(now + 2 * 60 * 60 * 1000);
+}
+
 function display(x, angle, secondary) {
   const monitor = new THREE.Group();
   monitor.position.set(x, 1.38, -2.86);
@@ -583,7 +556,7 @@ function display(x, angle, secondary) {
   const texture = new THREE.CanvasTexture(canvas);
   texture.colorSpace = THREE.SRGBColorSpace;
   const wallpaper = new Image();
-  function drawDesktop() {
+  function drawDesktop(time = cabinTimeFormatter.format(cabinTime())) {
     ctx.fillStyle = '#182c33';
     ctx.fillRect(0, 0, 720, 412);
     if (wallpaper.complete && wallpaper.naturalWidth) {
@@ -597,7 +570,9 @@ function display(x, angle, secondary) {
     ctx.fillStyle = '#f1f1f1';
     ctx.font = '12px system-ui';
     ctx.fillText('Finder    File    Edit    View    Go    Window    Help', 16, 15);
-    ctx.fillText('10:42 AM', 652, 15);
+    ctx.textAlign = 'right';
+    ctx.fillText(time, 705, 15);
+    ctx.textAlign = 'start';
     for (const [label, y] of [['Work experience', 52], ['Projects', 120]]) {
       ctx.fillStyle = '#91cbff';
       ctx.beginPath();
@@ -640,7 +615,7 @@ function display(x, angle, secondary) {
   if (secondary) {
     drawCodeEditor(ctx);
   } else {
-    wallpaper.addEventListener('load', drawDesktop);
+    wallpaper.addEventListener('load', () => drawDesktop());
     wallpaper.src = import.meta.env.BASE_URL + 'abstract-desktop.jpg';
     drawDesktop();
   }
@@ -657,9 +632,10 @@ function display(x, angle, secondary) {
       texture.needsUpdate = true;
     };
   }
+  return drawDesktop;
 }
 const mainDisplay = { x: -0.47, y: 1.38, z: -2.86, angle: 0.13 };
-display(mainDisplay.x, mainDisplay.angle, false);
+const updateMainDisplay = display(mainDisplay.x, mainDisplay.angle, false);
 const updateSecondaryDisplay = display(0.5, -0.31, true);
 
 box('#1b1b20', [0.63, 0.037, 0.215], [-0.42, 0.95, -2.4], scene, 0.015);
@@ -1134,7 +1110,13 @@ function updateCabinTime() {
   if (second === lastClockSecond) return;
   lastClockSecond = second;
 
-  const local = new Date(now + 2 * 60 * 60 * 1000);
+  const local = cabinTime(now);
+  const time = cabinTimeFormatter.format(local);
+  if (computerTime.textContent !== time) {
+    computerTime.textContent = time;
+    computerTime.dateTime = local.toISOString().slice(0, 16) + '+02:00';
+    updateMainDisplay(time);
+  }
   const minutes = local.getUTCMinutes() + local.getUTCSeconds() / 60;
   const hours = local.getUTCHours() + minutes / 60;
   hourHand.rotation.z = -hours * Math.PI / 6;

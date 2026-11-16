@@ -379,3 +379,4 @@ body:has(#computer:not([hidden])) #sound-room{visibility:hidden}
   font-size:.76rem;font-weight:600;text-underline-offset:3px;
 }
 .portfolio-text-link:focus-visible{outline:2px solid #d4e8a6;outline-offset:3px}
+#computer-time{white-space:nowrap;font-variant-numeric:tabular-nums;font-size:.76rem}
