@@ -279,7 +279,3 @@ a { color: #3d3a35; text-underline-offset: 4px }
   .skills-track { width: auto; animation: none }
   .skills-track ul { width: auto; flex-wrap: wrap; row-gap: 8px }
 }
-
-.project-grid .spread-detail { margin: 16px 0 }
-.project-grid .spread-detail img { margin: 0; width: 100%; aspect-ratio: auto; border: 1px solid #dedede; border-radius: 6px }
-.project-grid .spread-detail figcaption { font-size: .8rem; color: #555 }

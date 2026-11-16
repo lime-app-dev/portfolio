@@ -384,8 +384,12 @@ body:has(#computer:not([hidden])) #sound-room{visibility:hidden}
   padding:4px 9px;border-radius:999px;border:1px solid #d1cec7;
   background:#eeece7;color:#33332f;font-size:.75rem;font-weight:600;
 }
-.experience-intro .skill-pills{margin-bottom:0}
-.experience-intro .skill-pills li{background:#353535;color:#fff;border-color:#757575}
-.spread-detail{margin:14px 0}
-.spread-detail img{display:block;width:100%;height:auto;border:1px solid #deded9;border-radius:6px}
-.spread-detail figcaption{margin-top:5px;font-size:.76rem;color:#57554e}
+.window-skills{
+  padding:clamp(20px,4vw,30px) var(--inset,clamp(16px,5vw,42px));
+  border-top:1px solid #dedbd3;background:#f0eee8;
+}
+.window-skills h3{margin:0 0 14px;font-size:1.15rem;letter-spacing:-.025em}
+.skill-groups{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:16px}
+.skill-groups h4{margin:0;font-size:.82rem;color:#4d4b44}
+.skill-groups .skill-pills{margin:7px 0 0}
+.skill-groups .skill-pills li{background:#fff}

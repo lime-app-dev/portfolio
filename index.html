@@ -100,7 +100,6 @@
     <div class="window-content experience-content" data-folder="experience" hidden>
       <div class="experience-intro">
         <h2 tabindex="-1">Work experience</h2>
-        <ul class="skill-pills" aria-label="Relevant skills" role="list"><li>Liquid</li><li>HTML &amp; CSS</li><li>JavaScript</li><li>TypeScript</li><li>Accessibility</li><li>Performance</li></ul>
       </div>
       <ol class="experience-roles">
         <li>
@@ -116,6 +115,23 @@
           <p>I worked alongside a team of developers on small coding tasks for Shopify store owners, using HTML, CSS and JavaScript and learning Shopify’s Liquid templating language.</p>
         </li>
       </ol>
+      <section class="window-skills" aria-labelledby="experience-skills">
+        <h3 id="experience-skills">Skills</h3>
+        <div class="skill-groups">
+          <div>
+            <h4>Storefront development</h4>
+            <ul class="skill-pills" role="list"><li>Shopify theme development</li><li>Liquid</li><li>HTML &amp; CSS</li><li>JavaScript</li><li>TypeScript</li><li>Responsive design</li></ul>
+          </div>
+          <div>
+            <h4>Quality &amp; collaboration</h4>
+            <ul class="skill-pills" role="list"><li>Accessibility</li><li>Web performance</li><li>Cross-browser testing</li><li>Design and QA collaboration</li></ul>
+          </div>
+          <div>
+            <h4>Development workflow</h4>
+            <ul class="skill-pills" role="list"><li>Git</li><li>GitHub</li><li>Code review</li><li>Codex</li><li>Claude Code</li></ul>
+          </div>
+        </div>
+      </section>
       <section class="experience-work" aria-labelledby="experience-work-title">
         <h3 id="experience-work-title">Selected work at Eight</h3>
         <p>Shopify themes I contributed to, plus Kitenzo, a production app I worked on for a few months.</p>
@@ -161,7 +177,6 @@
       <div class="project-detail">
         <section class="engineering-notes" aria-labelledby="lime-engineering">
           <h3 id="lime-engineering">What I built</h3>
-          <ul class="skill-pills" aria-label="Relevant skills" role="list"><li>React</li><li>TypeScript</li><li>Admin GraphQL</li><li>Prisma</li><li>Shopify Functions</li><li>Theme app extensions</li></ul>
           <dl class="project-features">
             <div><dt>Embedded merchant admin</dt><dd>Built the offer editor with React and TypeScript, and used Shopify’s Admin GraphQL API and Prisma-backed storage to connect merchant settings to Shopify.</dd></div>
             <div><dt>Storefront and discounts</dt><dd>Built theme app blocks and shopper-facing widgets, and used Shopify Functions to apply bundle discounts. I also handled the theme editor’s block lifecycle so a new block can render before the merchant saves.</dd></div>
@@ -169,6 +184,23 @@
           </dl>
         </section>
       </div>
+      <section class="window-skills" aria-labelledby="lime-skills">
+        <h3 id="lime-skills">Skills</h3>
+        <div class="skill-groups">
+          <div>
+            <h4>Application stack</h4>
+            <ul class="skill-pills" role="list"><li>Node.js</li><li>React</li><li>React Router</li><li>TypeScript</li><li>PostgreSQL</li><li>Prisma</li></ul>
+          </div>
+          <div>
+            <h4>Shopify platform</h4>
+            <ul class="skill-pills" role="list"><li>Admin GraphQL API</li><li>Shopify Functions</li><li>Theme app extensions</li><li>Cart integration</li></ul>
+          </div>
+          <div>
+            <h4>Testing &amp; deployment</h4>
+            <ul class="skill-pills" role="list"><li>Vitest</li><li>Playwright</li><li>Git</li><li>GitHub</li><li>Vercel</li></ul>
+          </div>
+        </div>
+      </section>
     </article>
     <article class="window-content project-content" data-folder="spread" data-parent-folder="projects" hidden>
       <div class="project-hero">
@@ -183,15 +215,29 @@
       <div class="project-detail">
         <section class="engineering-notes" aria-labelledby="spread-engineering">
           <h3 id="spread-engineering">What I built</h3>
-          <figure class="spread-detail"><img src="/projects/spread-nutrition.webp" alt="Nutrition table rendered on Spread’s product page" width="845" height="207" loading="lazy"><figcaption>Product metafields rendered as a nutrition table.</figcaption></figure>
-          <ul class="skill-pills" aria-label="Relevant skills" role="list"><li>Liquid</li><li>CSS</li><li>JavaScript</li><li>JSON templates</li><li>Metafields</li><li>Theme editor schemas</li></ul>
           <dl class="project-features">
             <div><dt>Theme architecture</dt><dd>Built reusable Liquid sections, blocks and JSON templates for the homepage, collections and product pages, with schema settings merchants can configure in Shopify’s theme editor.</dd></div>
-            <div><dt>Structured product information</dt><dd>Used product metafields and Liquid to render nutrition tables and spice levels. Nutrition rows can include details such as sugars under carbohydrates, with rows drawn from the data each product provides.</dd></div>
             <div><dt>Storefront interactions</dt><dd>Used responsive CSS and JavaScript to support meal browsing and build a product-page add-on flow that sends selected extras to the cart alongside the meal.</dd></div>
           </dl>
         </section>
       </div>
+      <section class="window-skills" aria-labelledby="spread-skills">
+        <h3 id="spread-skills">Skills</h3>
+        <div class="skill-groups">
+          <div>
+            <h4>Theme architecture</h4>
+            <ul class="skill-pills" role="list"><li>Liquid</li><li>HTML &amp; CSS</li><li>JavaScript</li><li>JSON templates</li><li>Metafields</li><li>Theme editor schemas</li></ul>
+          </div>
+          <div>
+            <h4>Storefront engineering</h4>
+            <ul class="skill-pills" role="list"><li>Responsive design</li><li>Accessibility</li><li>Web performance</li><li>Cart interactions</li></ul>
+          </div>
+          <div>
+            <h4>Tooling &amp; delivery</h4>
+            <ul class="skill-pills" role="list"><li>Node.js &amp; npm</li><li>Shopify CLI</li><li>Theme Check</li><li>Playwright</li><li>Git</li><li>GitHub Actions</li></ul>
+          </div>
+        </div>
+      </section>
     </article>
   </section>
 </section>
