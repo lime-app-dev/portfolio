@@ -43,51 +43,56 @@
 </head>
 <body>
   <main>
-    <header class="portfolio-hero">
-      <input type="checkbox" id="pause-marquee">
-      <label for="pause-marquee">Pause motion</label>
-      <div class="marquee" aria-hidden="true">
-          <div class="marquee-track"><div><img src="../projects/spread.jpg" alt="" decoding="async"><img src="../experience/halftone.webp" alt="" decoding="async"><img src="../experience/capital.webp" alt="" decoding="async"></div><div><img src="../projects/spread.jpg" alt="" decoding="async"><img src="../experience/halftone.webp" alt="" decoding="async"><img src="../experience/capital.webp" alt="" decoding="async"></div><div><img src="../projects/spread.jpg" alt="" decoding="async"><img src="../experience/halftone.webp" alt="" decoding="async"><img src="../experience/capital.webp" alt="" decoding="async"></div></div>
-          <div class="marquee-track"><div><img src="../experience/flow.webp" alt="" decoding="async"><img src="../projects/lime-build-a-box.png" alt="" decoding="async"><img src="../experience/envy.webp" alt="" decoding="async"></div><div><img src="../experience/flow.webp" alt="" decoding="async"><img src="../projects/lime-build-a-box.png" alt="" decoding="async"><img src="../experience/envy.webp" alt="" decoding="async"></div><div><img src="../experience/flow.webp" alt="" decoding="async"><img src="../projects/lime-build-a-box.png" alt="" decoding="async"><img src="../experience/envy.webp" alt="" decoding="async"></div></div>
+    <header class="listing-overview" id="overview">
+      <div class="listing-gallery">
+        <div class="gallery-slides" aria-label="Project screenshots" tabindex="0">
+          <figure id="preview-1"><img src="../projects/spread.jpg" alt="Spread’s prepared-meal storefront" decoding="async"><figcaption>Spread</figcaption></figure>
+          <figure id="preview-2"><img src="../projects/lime-build-a-box.png" alt="Lime Bundles build-a-box widget" decoding="async"><figcaption>Lime Bundles</figcaption></figure>
+          <figure id="preview-3"><img src="../experience/flow.webp" alt="Flow storefront by Eight" decoding="async"><figcaption>Flow</figcaption></figure>
+          <figure id="preview-4"><img src="../experience/halftone.webp" alt="Halftone storefront by Eight" decoding="async"><figcaption>Halftone</figcaption></figure>
+        </div>
+        <nav class="gallery-thumbnails" aria-label="Choose a screenshot">
+          <a href="#preview-1" aria-current="true"><img src="../projects/spread.jpg" alt=""><span>Spread</span></a>
+          <a href="#preview-2"><img src="../projects/lime-build-a-box.png" alt=""><span>Lime Bundles</span></a>
+          <a href="#preview-3"><img src="../experience/flow.webp" alt=""><span>Flow</span></a>
+          <a href="#preview-4"><img src="../experience/halftone.webp" alt=""><span>Halftone</span></a>
+        </nav>
       </div>
       <div class="hero-content">
-      <a class="studio-link" href="../">Open the interactive studio <span aria-hidden="true">↗</span></a>
-      <h1>Bernardine Richards</h1>
-      <p class="role">Senior Frontend Developer · Shopify themes and apps</p>
-      <p>I started by fixing storefronts for Shopify merchants. At Eight, I helped build and maintain themes used across many stores. That experience shaped two projects of my own: a Shopify app and a theme I built from scratch.</p>
-      <nav aria-label="Portfolio sections"><a href="#experience">Work experience</a><a href="#contributions">Things I worked on</a><a href="#projects">Projects</a><a href="#skills">Skills</a><a href="#contact">Contact</a></nav>
+        <h1>Bernardine Richards</h1>
+        <p class="role">Senior Frontend Developer · Shopify themes and apps</p>
+        <p>I started by fixing storefronts for Shopify merchants. At Eight, I helped build and maintain themes used across many stores. That experience shaped two projects of my own, Lime Bundles and Spread.</p>
+        <div class="listing-actions">
+          <a class="listing-primary" href="#projects">View projects</a>
+          <a href="../">Open the 3D studio <span aria-hidden="true">↗</span></a>
+        </div>
       </div>
     </header>
+    <nav class="listing-nav" aria-label="Portfolio sections">
+      <a href="#overview" aria-current="location">Overview</a><a href="#projects">Projects</a><a href="#skills">Skills</a><a href="#experience">Experience</a><a href="#contact">Contact</a>
+    </nav>
     <div class="portfolio-content">
-    <section id="experience">
-      <h2>Work experience</h2>
-      <ol class="timeline" role="list">
-        <li>
-          <details open>
-            <summary>
-              <span class="dates"><time datetime="2019-11">November 2019</time> – <time datetime="2026-10">October 2026</time></span>
-              <span class="timeline-title">Eight</span>
-              <span class="timeline-role">Senior Frontend Developer</span>
-            </summary>
-            <div class="timeline-detail">
-              <p>At Eight, I went from fixing individual storefronts to building features for themes that many merchants configure in different ways. Over nearly seven years, I worked with designers and testers to develop and maintain responsive Shopify themes, with a focus on performance, accessibility and maintainable Liquid, JavaScript and TypeScript.</p>
-              <a href="#contributions">See the themes and app I worked on</a>
-            </div>
-          </details>
-        </li>
-        <li>
-          <details open>
-            <summary>
-              <span class="dates"><time datetime="2019-10">October 2019</time> · Part-time, remote</span>
-              <span class="timeline-title">Carson eCommerce</span>
-              <span class="timeline-role">Junior Front End Developer</span>
-            </summary>
-            <div class="timeline-detail">
-              <p>I started with small fixes for Shopify store owners. Working alongside other developers, I used HTML, CSS and JavaScript to update storefronts and learned how Shopify’s Liquid templates turn store data into pages.</p>
-            </div>
-          </details>
-        </li>
-      </ol>
+    <section id="projects">
+      <h2>Projects</h2>
+      <p class="section-intro">I brought that experience into two builds of my own. Lime Bundles connects merchant settings to storefront and cart behavior. Spread gives food retailers the tools to build a storefront around their products.</p>
+      <div class="project-grid">
+      <article id="lime-bundles">
+        <img src="../projects/lime-build-a-box.png" alt="Lime Bundles storefront builder and completed bundle" width="960" height="540" loading="lazy">
+        <h3>Lime Bundles</h3>
+        <p class="project-type">Full-stack Shopify app</p>
+        <p>I built Lime Bundles from scratch as a full-stack Shopify app. I developed the embedded merchant admin with React and TypeScript, integrated Shopify’s Admin GraphQL API and Prisma-backed storage, and built theme app blocks that shoppers use to assemble bundles.</p>
+        <p>I used Shopify Functions for discounts and built cross-theme cart integration that checks for incomplete adds and falls back to the cart page when a drawer cannot be updated reliably.</p>
+        <div class="links"><a href="https://apps.shopify.com/lime-bundles">Shopify App Store listing</a><a href="../#lime-bundles">View Lime Bundles in the studio</a></div>
+      </article>
+      <article id="spread">
+        <img src="../projects/spread.jpg" alt="Spread demo storefront with a prepared-meal menu" width="1240" height="810" loading="lazy">
+        <h3>Spread</h3>
+        <p class="project-type">Shopify theme</p>
+        <p>I built Spread from scratch as a Shopify theme for prepared-meal and food retailers. I developed reusable Liquid sections and blocks, JSON templates and theme editor settings so merchants can configure their storefronts.</p>
+        <p>I used product metafields to show structured details such as nutrition and spice levels, and built a product-page flow that adds selected meal extras to the cart alongside the main item.</p>
+        <a href="../#spread">View Spread in the studio</a>
+      </article>
+      </div>
     </section>
     <section id="contributions">
       <h2>Things I worked on</h2>
@@ -114,28 +119,6 @@
           <span><strong>Kitenzo</strong><small>Shopify App Store</small></span><span class="card-arrow" aria-hidden="true">↗</span>
         </a></li>
       </ul>
-    </section>
-    <section id="projects">
-      <h2>Projects</h2>
-      <p class="section-intro">I brought that experience into two builds of my own. Lime Bundles connects merchant settings to storefront and cart behavior. Spread gives food retailers the tools to build a storefront around their products.</p>
-      <div class="project-grid">
-      <article id="lime-bundles">
-        <img src="../projects/lime-build-a-box.png" alt="Lime Bundles storefront builder and completed bundle" width="960" height="540" loading="lazy">
-        <h3>Lime Bundles</h3>
-        <p class="project-type">Full-stack Shopify app</p>
-        <p>I built Lime Bundles from scratch as a full-stack Shopify app. I developed the embedded merchant admin with React and TypeScript, integrated Shopify’s Admin GraphQL API and Prisma-backed storage, and built theme app blocks that shoppers use to assemble bundles.</p>
-        <p>I used Shopify Functions for discounts and built cross-theme cart integration that checks for incomplete adds and falls back to the cart page when a drawer cannot be updated reliably.</p>
-        <div class="links"><a href="https://apps.shopify.com/lime-bundles">Shopify App Store listing</a><a href="../#lime-bundles">View Lime Bundles in the studio</a></div>
-      </article>
-      <article id="spread">
-        <img src="../projects/spread.jpg" alt="Spread demo storefront with a prepared-meal menu" width="1240" height="810" loading="lazy">
-        <h3>Spread</h3>
-        <p class="project-type">Shopify theme</p>
-        <p>I built Spread from scratch as a Shopify theme for prepared-meal and food retailers. I developed reusable Liquid sections and blocks, JSON templates and theme editor settings so merchants can configure their storefronts.</p>
-        <p>I used product metafields to show structured details such as nutrition and spice levels, and built a product-page flow that adds selected meal extras to the cart alongside the main item.</p>
-        <a href="../#spread">View Spread in the studio</a>
-      </article>
-      </div>
     </section>
     <section id="skills">
       <div class="skills-heading">
@@ -165,6 +148,36 @@
           <a href="#experience">See work experience</a>
         </article>
       </div>
+    </section>
+    <section id="experience">
+      <h2>Work experience</h2>
+      <ol class="timeline" role="list">
+        <li>
+          <details open>
+            <summary>
+              <span class="dates"><time datetime="2019-11">November 2019</time> – <time datetime="2026-10">October 2026</time></span>
+              <span class="timeline-title">Eight</span>
+              <span class="timeline-role">Senior Frontend Developer</span>
+            </summary>
+            <div class="timeline-detail">
+              <p>At Eight, I went from fixing individual storefronts to building features for themes that many merchants configure in different ways. Over nearly seven years, I worked with designers and testers to develop and maintain responsive Shopify themes, with a focus on performance, accessibility and maintainable Liquid, JavaScript and TypeScript.</p>
+              <a href="#contributions">See the themes and app I worked on</a>
+            </div>
+          </details>
+        </li>
+        <li>
+          <details open>
+            <summary>
+              <span class="dates"><time datetime="2019-10">October 2019</time> · Part-time, remote</span>
+              <span class="timeline-title">Carson eCommerce</span>
+              <span class="timeline-role">Junior Front End Developer</span>
+            </summary>
+            <div class="timeline-detail">
+              <p>I started with small fixes for Shopify store owners. Working alongside other developers, I used HTML, CSS and JavaScript to update storefronts and learned how Shopify’s Liquid templates turn store data into pages.</p>
+            </div>
+          </details>
+        </li>
+      </ol>
     </section>
     <section id="contact">
       <h2>Contact</h2>
