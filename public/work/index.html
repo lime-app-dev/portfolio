@@ -43,21 +43,31 @@
 </head>
 <body>
   <main>
-    <header class="listing-overview" id="overview">
+    <header class="listing-stage" id="overview">
+      <div class="listing-masthead"><span>Bernardine Richards</span><a href="../">Open the 3D studio <span aria-hidden="true">↗</span></a></div>
       <div class="listing-gallery">
         <div class="gallery-slides" aria-label="Project screenshots" tabindex="0">
           <figure id="preview-1"><img src="../projects/spread.jpg" alt="Spread’s prepared-meal storefront" decoding="async"><figcaption>Spread</figcaption></figure>
-          <figure id="preview-2"><img src="../projects/lime-build-a-box.png" alt="Lime Bundles build-a-box widget" decoding="async"><figcaption>Lime Bundles</figcaption></figure>
+          <figure id="preview-2"><img src="../projects/lime-editor.webp" alt="Lime Bundles editor with storefront previews" decoding="async"><figcaption>Lime Bundles</figcaption></figure>
           <figure id="preview-3"><img src="../experience/flow.webp" alt="Flow storefront by Eight" decoding="async"><figcaption>Flow</figcaption></figure>
           <figure id="preview-4"><img src="../experience/halftone.webp" alt="Halftone storefront by Eight" decoding="async"><figcaption>Halftone</figcaption></figure>
+          <figure id="preview-5"><img src="../experience/capital.webp" alt="Capital storefront by Eight" decoding="async" loading="lazy"><figcaption>Capital</figcaption></figure>
+          <figure id="preview-6"><img src="../experience/envy.webp" alt="Envy storefront by Eight" decoding="async" loading="lazy"><figcaption>Envy</figcaption></figure>
         </div>
         <nav class="gallery-thumbnails" aria-label="Choose a screenshot">
           <a href="#preview-1" aria-current="true"><img src="../projects/spread.jpg" alt=""><span>Spread</span></a>
-          <a href="#preview-2"><img src="../projects/lime-build-a-box.png" alt=""><span>Lime Bundles</span></a>
+          <a href="#preview-2"><img src="../projects/lime-editor.webp" alt=""><span>Lime Bundles</span></a>
           <a href="#preview-3"><img src="../experience/flow.webp" alt=""><span>Flow</span></a>
           <a href="#preview-4"><img src="../experience/halftone.webp" alt=""><span>Halftone</span></a>
+          <a href="#preview-5"><img src="../experience/capital.webp" alt=""><span>Capital</span></a>
+          <a href="#preview-6"><img src="../experience/envy.webp" alt=""><span>Envy</span></a>
         </nav>
       </div>
+    </header>
+    <nav class="listing-nav" aria-label="Portfolio sections">
+      <a href="#overview" aria-current="location">Overview</a><a href="#projects">Projects</a><a href="#skills">Skills</a><a href="#experience">Experience</a><a href="#contact">Contact</a>
+    </nav>
+    <div class="portfolio-content">
       <div class="hero-content">
         <h1>Bernardine Richards</h1>
         <p class="role">Senior Frontend Developer · Shopify themes and apps</p>
@@ -67,17 +77,12 @@
           <a href="../">Open the 3D studio <span aria-hidden="true">↗</span></a>
         </div>
       </div>
-    </header>
-    <nav class="listing-nav" aria-label="Portfolio sections">
-      <a href="#overview" aria-current="location">Overview</a><a href="#projects">Projects</a><a href="#skills">Skills</a><a href="#experience">Experience</a><a href="#contact">Contact</a>
-    </nav>
-    <div class="portfolio-content">
     <section id="projects">
       <h2>Projects</h2>
       <p class="section-intro">I brought that experience into two builds of my own. Lime Bundles connects merchant settings to storefront and cart behavior. Spread gives food retailers the tools to build a storefront around their products.</p>
       <div class="project-grid">
       <article id="lime-bundles">
-        <img src="../projects/lime-build-a-box.png" alt="Lime Bundles storefront builder and completed bundle" width="960" height="540" loading="lazy">
+        <img src="../projects/lime-editor.webp" alt="Lime Bundles editor with storefront previews and header image settings" width="972" height="546" loading="lazy">
         <h3>Lime Bundles</h3>
         <p class="project-type">Full-stack Shopify app</p>
         <p>I built Lime Bundles from scratch as a full-stack Shopify app. I developed the embedded merchant admin with React and TypeScript, integrated Shopify’s Admin GraphQL API and Prisma-backed storage, and built theme app blocks that shoppers use to assemble bundles.</p>
@@ -90,6 +95,7 @@
         <p class="project-type">Shopify theme</p>
         <p>I built Spread from scratch as a Shopify theme for prepared-meal and food retailers. I developed reusable Liquid sections and blocks, JSON templates and theme editor settings so merchants can configure their storefronts.</p>
         <p>I used product metafields to show structured details such as nutrition and spice levels, and built a product-page flow that adds selected meal extras to the cart alongside the main item.</p>
+        <figure class="spread-detail"><img src="../projects/spread-nutrition.webp" alt="Nutrition table rendered on Spread’s product page" width="845" height="207" loading="lazy"><figcaption>Nutrition details rendered from product metafields.</figcaption></figure>
         <a href="../#spread">View Spread in the studio</a>
       </article>
       </div>

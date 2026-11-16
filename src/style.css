@@ -386,3 +386,6 @@ body:has(#computer:not([hidden])) #sound-room{visibility:hidden}
 }
 .experience-intro .skill-pills{margin-bottom:0}
 .experience-intro .skill-pills li{background:#353535;color:#fff;border-color:#757575}
+.spread-detail{margin:14px 0}
+.spread-detail img{display:block;width:100%;height:auto;border:1px solid #deded9;border-radius:6px}
+.spread-detail figcaption{margin-top:5px;font-size:.76rem;color:#57554e}

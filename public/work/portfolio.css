@@ -1,36 +1,42 @@
 :root {
   color-scheme: light;
-  background: #f8f7f4;
+  background: #fff;
   color: #262522;
   font: 16px/1.65 system-ui, sans-serif;
 }
 * { box-sizing: border-box }
 body { margin: 0 }
-h1, h2 { font-family: Georgia, serif; font-weight: 500; line-height: 1.08; letter-spacing: -.04em }
+h1, h2 { font-family: inherit; font-weight: 650; line-height: 1.08; letter-spacing: -.04em }
 h2 { font-size: clamp(2rem, 5vw, 3.2rem); margin: 0 0 1.25rem }
 h3 { font-size: 1.15rem; line-height: 1.25; margin: 0 0 .4rem }
 p { margin: 0 0 12px }
 a { color: #3d3a35; text-underline-offset: 4px }
 :focus-visible { outline: 2px solid currentColor; outline-offset: 4px }
 
-.listing-overview, .portfolio-content {
-  width: min(100% - clamp(32px, 8vw, 112px), 1240px);
+.portfolio-content, .listing-gallery, .listing-masthead {
+  width: min(100% - clamp(32px, 8vw, 144px), 1280px);
   margin-inline: auto;
 }
-.listing-overview {
-  display: grid;
-  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
-  align-items: center;
-  gap: clamp(24px, 5vw, 72px);
-  padding-block: clamp(28px, 5vw, 70px);
+.listing-stage { background: #141414; color: #fff; padding-bottom: clamp(24px, 4vw, 52px) }
+.listing-masthead {
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 12px; padding-block: 18px; margin-bottom: clamp(12px, 2.5vw, 32px);
+  border-bottom: 1px solid #383838; font-size: .86rem; font-weight: 650;
+}
+.listing-masthead a { color: inherit; white-space: nowrap }
+.listing-gallery { max-width: 1120px }
+.hero-content {
+  padding-block: clamp(44px, 7vw, 96px);
+  border-bottom: 1px solid #dedede;
 }
 .gallery-slides {
   display: flex;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
-  border: 1px solid #dcd9d2;
-  border-radius: 10px;
-  background: #edeae3;
+  border: 1px solid #3b3b3b;
+  border-radius: 15px;
+  background: #1c1c1c;
+  scrollbar-width: none;
 }
 .gallery-slides figure {
   position: relative;
@@ -42,24 +48,25 @@ a { color: #3d3a35; text-underline-offset: 4px }
 .gallery-slides img {
   display: block;
   width: 100%;
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 2.2;
   object-fit: contain;
-  background: #e8e5de;
+  background: #1c1c1c;
 }
-.gallery-slides figcaption { padding: 7px 12px; color: #55514a; font-size: .8rem }
-.gallery-thumbnails { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-top: 10px }
+.gallery-slides figcaption { padding: 7px 12px; color: #ddd; font-size: .8rem }
+.gallery-thumbnails { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; margin-top: 10px }
 .gallery-thumbnails a {
   min-width: 0;
   padding: 4px;
-  border: 1px solid #dcd9d2;
-  border-radius: 6px;
+  border: 1px solid #555;
+  color: #fff;
+  border-radius: 8px;
   text-decoration: none;
   font-size: .75rem;
 }
-.gallery-thumbnails a:hover, .gallery-thumbnails [aria-current] { border-color: #262522; background: #eeece7 }
+.gallery-thumbnails a:hover, .gallery-thumbnails [aria-current] { border-color: #fff; background: #313131 }
 .gallery-thumbnails img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; object-position: top; border-radius: 3px }
 .gallery-thumbnails span { display: block; padding-inline: 3px }
-.hero-content h1 { font-size: clamp(2.65rem, 5vw, 5.15rem); margin: 0 0 .35em }
+.hero-content h1 { font-size: clamp(2.35rem, 5vw, 4.4rem); margin: 0 0 .35em }
 .hero-content p { max-width: 50ch }
 .hero-content .role { font-size: 1.03rem; font-weight: 650 }
 .listing-actions, .links { display: flex; flex-wrap: wrap; gap: 10px 16px }
@@ -82,7 +89,7 @@ a { color: #3d3a35; text-underline-offset: 4px }
   gap: clamp(12px, 4vw, 36px);
   overflow-x: auto;
   padding-inline: max(16px, calc((100% - 1240px) / 2), clamp(16px, 4vw, 56px));
-  background: #f8f7f4;
+  background: #fff;
   border-block: 1px solid #dcd9d2;
 }
 .listing-nav a {
@@ -96,9 +103,10 @@ a { color: #3d3a35; text-underline-offset: 4px }
 .listing-nav a:hover, .listing-nav [aria-current] { border-bottom-color: #262522 }
 .portfolio-content section, .project-grid article { scroll-margin-top: 70px }
 @media (max-width: 740px) {
-  .listing-overview { grid-template-columns: minmax(0, 1fr) }
+  .gallery-thumbnails { grid-template-columns: repeat(3, minmax(0, 1fr)) }
+  .gallery-slides img { aspect-ratio: 16 / 9 }
 }
-.portfolio-content > section { padding-block: clamp(32px, 6vw, 68px); border-bottom: 1px solid #dcd9d2 }
+.portfolio-content > section { padding-block: clamp(48px, 7vw, 96px); border-bottom: 1px solid #dcd9d2 }
 .timeline { margin: 0 0 0 6px; padding: 0 0 0 clamp(17px, 4vw, 36px); border-left: 2px solid #d2cfc8; list-style: none }
 .timeline li { position: relative }
 .timeline li::before {
@@ -110,7 +118,7 @@ a { color: #3d3a35; text-underline-offset: 4px }
   height: 12px;
   border-radius: 50%;
   background: #45423b;
-  box-shadow: 0 0 0 4px #f8f7f4;
+  box-shadow: 0 0 0 4px #fff;
 }
 .timeline li + li { margin-top: 28px }
 .timeline article { max-width: 75ch }
@@ -236,7 +244,7 @@ a { color: #3d3a35; text-underline-offset: 4px }
   background: #fffefa;
 }
 .timeline.is-scroll-linked li.is-current::before {
-  box-shadow: 0 0 0 3px #f8f7f4, 0 0 0 5px #8a8478;
+  box-shadow: 0 0 0 3px #fff, 0 0 0 5px #8a8478;
 }
 @media (prefers-reduced-motion: no-preference) {
   .timeline details, .timeline li::before {
@@ -271,3 +279,7 @@ a { color: #3d3a35; text-underline-offset: 4px }
   .skills-track { width: auto; animation: none }
   .skills-track ul { width: auto; flex-wrap: wrap; row-gap: 8px }
 }
+
+.project-grid .spread-detail { margin: 16px 0 }
+.project-grid .spread-detail img { margin: 0; width: 100%; aspect-ratio: auto; border: 1px solid #dedede; border-radius: 6px }
+.project-grid .spread-detail figcaption { font-size: .8rem; color: #555 }
