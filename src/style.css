@@ -220,8 +220,7 @@ body:has(#computer:not([hidden])) #sound-room{visibility:hidden}
 .experience-content{background:#f5f1eb;color:#27252c;--inset:clamp(18px,5vw,42px)}
 .experience-intro{
   padding:clamp(23px,5vw,38px) var(--inset);
-  background:radial-gradient(ellipse at 94% 5%,#ddd1e8,transparent 60%),#ece7f1;
-  border-bottom:1px solid #ddd2e3;
+  background:#262626;color:#fff;
 }
 .experience-intro h2{
   margin:0;font:400 clamp(2rem,7vw,3.45rem)/1.05 Georgia,serif;letter-spacing:-.06em;
@@ -377,3 +376,13 @@ body:has(#computer:not([hidden])) #sound-room{visibility:hidden}
 }
 .portfolio-text-link:focus-visible{outline:2px solid #d4e8a6;outline-offset:3px}
 #computer-time{white-space:nowrap;font-variant-numeric:tabular-nums;font-size:.76rem}
+
+.skill-pills{
+  display:flex;flex-wrap:wrap;gap:6px;list-style:none;padding:0;margin:12px 0 16px;
+}
+.skill-pills li{
+  padding:4px 9px;border-radius:999px;border:1px solid #d1cec7;
+  background:#eeece7;color:#33332f;font-size:.75rem;font-weight:600;
+}
+.experience-intro .skill-pills{margin-bottom:0}
+.experience-intro .skill-pills li{background:#353535;color:#fff;border-color:#757575}
