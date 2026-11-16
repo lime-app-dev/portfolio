@@ -14,6 +14,7 @@ try {
   renderer = new THREE.WebGLRenderer({ antialias: true });
 } catch {
   hint.textContent = 'This browser needs WebGL to open the studio.';
+  hint.hidden = false;
   document.querySelector('#instruction').hidden = true;
   throw new Error('WebGL is unavailable');
 }
@@ -108,9 +109,9 @@ for (const wall of walls) {
 box('#626262', [7, 0.12, 7], [0, 3.35, 0]);
 
 const wallClock = new THREE.Group();
-wallClock.position.set(3.425, 2.27, -0.62);
+wallClock.position.set(3.425, 2.27, -0.88);
 wallClock.rotation.y = -Math.PI / 2;
-wallClock.scale.set(1.9, 1.9, 1);
+wallClock.scale.set(1.72, 1.72, 1);
 scene.add(wallClock);
 
 const clockSilver = new THREE.MeshStandardMaterial({ color: '#d8dee7', metalness: 0.42, roughness: 0.28 });
@@ -847,6 +848,28 @@ let joystickX = 0;
 let joystickY = 0;
 const keys = new Set();
 const doorway = new THREE.Vector3(0.27, 1.64, 2.91);
+const markerCanvas = document.createElement('canvas');
+markerCanvas.width = markerCanvas.height = 128;
+const markerContext = markerCanvas.getContext('2d');
+markerContext.fillStyle = '#f2dbff';
+markerContext.shadowColor = '#d57aff';
+markerContext.shadowBlur = 23;
+markerContext.beginPath();
+markerContext.moveTo(36, 49);
+markerContext.lineTo(92, 49);
+markerContext.lineTo(64, 83);
+markerContext.closePath();
+markerContext.fill();
+const markerTexture = new THREE.CanvasTexture(markerCanvas);
+markerTexture.colorSpace = THREE.SRGBColorSpace;
+const deskMarker = new THREE.Sprite(
+  new THREE.SpriteMaterial({ map: markerTexture, depthWrite: false, toneMapped: false })
+);
+const markerHeight = 2.04;
+deskMarker.position.set(deskCenter, markerHeight, -2.76);
+deskMarker.scale.set(0.49, 0.49, 1);
+scene.add(deskMarker);
+
 const seated = new THREE.Vector3(deskCenter, 1.42, -1.57);
 const screenWidth = 0.889;
 const screenHeight = 0.503;
@@ -936,6 +959,7 @@ function sitDown() {
 
 function enterComputer(nextMode) {
   mode = nextMode;
+  deskMarker.visible = false;
   setComputerAmbience(true);
   keys.clear();
   updateKeycaps();
@@ -1192,7 +1216,10 @@ renderer.setAnimationLoop(now => {
     coffeeStatus.hidden = !coffeeNearby || !coffeeStation.finished;
     const status = coffeeStatus.hidden ? '' : 'Coffee ready';
     if (coffeeStatus.textContent !== status) coffeeStatus.textContent = status;
-    hint.hidden = chairNearby || Boolean(action);
+    deskMarker.visible = !chairNearby;
+    const pulse = reduceMotion.matches ? 0 : Math.sin(now * 0.003);
+    deskMarker.position.y = markerHeight + pulse * 0.047;
+    deskMarker.material.opacity = 0.88 + pulse * 0.12;
   }
   if (!computer.hidden) return;
   if (transition) {
